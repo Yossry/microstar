@@ -1,6 +1,6 @@
 {
-    'name': 'NOHA General Configuration',
-    'version': '13.0.1.2.0',
+    'name': 'MICRO Star',
+    'version': '14.0.1.2.0',
     'category': 'Sales/Sales',
     'sequence': 3,
     'summary': 'Additional In Product Management',
