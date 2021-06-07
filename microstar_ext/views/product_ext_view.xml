@@ -24,6 +24,15 @@
                            options="{'no_quick_create':True, 'no_create_edit': True, 'limit': 10}"/>
                 </field>
 
+                <xpath expr="//notebook" position="inside">
+                    <page name="supplier_notes" string="Supplier Notes">
+                        <field name="supplier_notes" widget="html"/>
+                    </page>
+                    <page name="other_notes" string="Other Notes">
+                        <field name="other_notes" widget="html"/>
+                    </page>
+                </xpath>
+
             </field>
         </record>
 

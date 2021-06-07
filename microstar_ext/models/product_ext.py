@@ -11,3 +11,5 @@ class ProductTemplate(models.Model):
     product_origin_id = fields.Many2one("product.origin", string="Origin", help="Select a Origin for this product")
     product_usage_id = fields.Many2one("product.usage", string="Usage", help="Select a Usage for this product")
     product_size = fields.Char('Size')
+    supplier_notes = fields.Html('Supplier Notes')
+    other_notes = fields.Html('Other Notes')
