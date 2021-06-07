@@ -17,7 +17,10 @@
         'security/ir.model.access.csv',
         'data/data.xml',
 
+        'views/product_model_view.xml',
         'views/product_brand_view.xml',
+        'views/product_origin_view.xml',
+        'views/product_usage_view.xml',
         'views/product_ext_view.xml',
     ],
     'installable': True,
