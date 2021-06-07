@@ -1,0 +1,6 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+
+access_product_model_user,product.model.user.access,model_product_model,base.group_user,1,1,1,0
+access_product_brand_user,product.brand.user.access,model_product_brand,base.group_user,1,1,1,0
+access_product_origin_user,product.origin.user.access,model_product_origin,base.group_user,1,1,1,0
+access_product_usage_user,product.usage.user.access,model_product_usage,base.group_user,1,1,1,0
