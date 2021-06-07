@@ -9,6 +9,7 @@
             <field name="inherit_id" ref="product.product_template_form_view"/>
             <field name="arch" type="xml">
                 <field name="categ_id" position="after">
+                    <field name="item_code"/>
                     <field name="product_brand_id" placeholder="Brand"
                            options="{'no_quick_create':True, 'no_create_edit': True, 'limit': 10}"/>
 
@@ -16,6 +17,8 @@
 
                 <field name="company_id" position="before">
                     <field name="product_size"/>
+                    <field name="min_qty"/>
+                    <field name="max_qty"/>
                     <field name="product_model_id"
                            options="{'no_quick_create':True, 'no_create_edit': True, 'limit': 10}"/>
                     <field name="product_origin_id"
@@ -28,8 +31,9 @@
                     <page name="supplier_notes" string="Supplier Notes">
                         <field name="supplier_notes" widget="html"/>
                     </page>
-                    <page name="other_notes" string="Other Notes">
-                        <field name="other_notes" widget="html"/>
+
+                    <page name="product_description" string="Product Description">
+                        <field name="product_description" widget="html"/>
                     </page>
                 </xpath>
 
@@ -41,11 +45,16 @@
             <field name="model">product.template</field>
             <field name="inherit_id" ref="product.product_template_tree_view"/>
             <field name="arch" type="xml">
+                <field name="name" position="before">
+                    <field name="item_code"/>
+                </field>
                 <field name="name" position="after">
                     <field name="product_model_id"/>
                     <field name="product_brand_id"/>
                     <field name="product_origin_id" optional="hide"/>
                     <field name="product_usage_id" optional="hide"/>
+                    <field name="min_qty" optional="hide"/>
+                    <field name="max_qty" optional="hide"/>
                 </field>
             </field>
         </record>
@@ -55,11 +64,16 @@
             <field name="model">product.product</field>
             <field name="inherit_id" ref="product.product_product_tree_view"/>
             <field name="arch" type="xml">
+                <field name="name" position="before">
+                    <field name="item_code"/>
+                </field>
                 <field name="name" position="after">
                     <field name="product_brand_id"/>
                     <field name="product_brand_id"/>
                     <field name="product_origin_id" optional="hide"/>
                     <field name="product_usage_id" optional="hide"/>
+                    <field name="min_qty" optional="hide"/>
+                    <field name="max_qty" optional="hide"/>
                 </field>
             </field>
         </record>
@@ -69,6 +83,9 @@
             <field name="model">product.template</field>
             <field name="inherit_id" ref="product.product_template_search_view"/>
             <field name="arch" type="xml">
+                <field name="name" position="before">
+                    <field name="item_code"/>
+                </field>
                 <field name="name" position="after">
                     <field name="product_model_id"/>
                     <field name="product_brand_id"/>
