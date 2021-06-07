@@ -2,16 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="3b82f502-8e91-4d7c-8780-705ceddb6a3b" name="Default Changelist" comment="Commit Done">
-      <change afterPath="$PROJECT_DIR$/mircostar_ext/models/product_model.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/mircostar_ext/models/product_origin.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/mircostar_ext/models/product_usage.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/mircostar_ext/views/product_model_view.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/mircostar_ext/views/product_origin_view.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/mircostar_ext/views/product_usage_view.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mircostar_ext/models/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/mircostar_ext/models/__init__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mircostar_ext/security/ir.model.access.csv" beforeDir="false" afterPath="$PROJECT_DIR$/mircostar_ext/security/ir.model.access.csv" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/mircostar_ext/views/product_brand_view.xml" beforeDir="false" afterPath="$PROJECT_DIR$/mircostar_ext/views/product_brand_view.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -21,14 +12,11 @@
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
       <map>
-        <entry key="$PROJECT_DIR$" value="Production" />
+        <entry key="$PROJECT_DIR$" value="main" />
       </map>
     </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
     <option name="UPDATE_TYPE" value="REBASE" />
-  </component>
-  <component name="HighlightingSettingsPerFile">
-    <setting file="file://$PROJECT_DIR$/mircostar_ext/models/product_model.py" root0="FORCE_HIGHLIGHTING" />
   </component>
   <component name="ProjectId" id="1r71jK2kskOfgyvTziem9hv3Ghi" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
