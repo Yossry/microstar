@@ -2,16 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="3b82f502-8e91-4d7c-8780-705ceddb6a3b" name="Default Changelist" comment="Commit Done">
-      <change afterPath="$PROJECT_DIR$/mircostar_ext/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/mircostar_ext/__manifest__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/mircostar_ext/data/data.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/mircostar_ext/models/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/mircostar_ext/reports/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/mircostar_ext/security/ir.model.access.csv" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/mircostar_ext/security/security.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/mircostar_ext/static/description/icon.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/mircostar_ext/wizards/__init__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/mircostar_ext/models/product_brand.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/mircostar_ext/models/product_ext.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -36,16 +28,16 @@
   <component name="PropertiesComponent">
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/mircostar_ext/wizards" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/mircostar_ext/views" />
     <property name="settings.editor.selected.configurable" value="preferences.fileTypes" />
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/mircostar_ext/views" />
+      <recent name="$PROJECT_DIR$/mircostar_ext/models" />
       <recent name="$PROJECT_DIR$/mircostar_ext/wizards" />
       <recent name="$PROJECT_DIR$/mircostar_ext/reports" />
-      <recent name="$PROJECT_DIR$/mircostar_ext/models" />
       <recent name="$PROJECT_DIR$/mircostar_ext" />
-      <recent name="$PROJECT_DIR$" />
     </key>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
@@ -85,7 +77,28 @@
       <option name="project" value="LOCAL" />
       <updated>1623074756775</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="Commit Done">
+      <created>1623075241391</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1623075241391</updated>
+    </task>
+    <task id="LOCAL-00006" summary="Commit Done">
+      <created>1623075251697</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1623075251697</updated>
+    </task>
+    <task id="LOCAL-00007" summary="Commit Done">
+      <created>1623075468899</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1623075468899</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
