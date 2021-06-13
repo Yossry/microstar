@@ -17,3 +17,14 @@ class ProductTemplate(models.Model):
     min_qty = fields.Float('Minimum Qty', tracking=True)
     max_qty = fields.Float('Maximum Qty', tracking=True)
     product_description = fields.Html('Description')
+
+    @api.model_create_multi
+    def create(self, vals_list):
+        templates = super(ProductTemplate, self).create(vals_list)
+        if templates:
+            for template in templates:
+                if not template.item_code:
+                    item_code = self.env['ir.sequence'].next_by_code('product.template')
+                    template.item_code = item_code
+                    template.barcode = item_code
+        return templates
