@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <record id="action_police_verification_report" model="ir.actions.report">
+            <field name="name">Police Verification</field>
+            <field name="model">hr.employee</field>
+            <field name="report_type">qweb-pdf</field>
+            <field name="report_name">hr_ext.police_verification_report</field>
+            <field name="report_file">hr_ext.police_verification_report</field>
+        </record>
+    </data>
+</odoo>

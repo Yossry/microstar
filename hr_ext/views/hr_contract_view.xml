@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!--***** HR Contract Form View *****-->
+    <record id="inherited_hr_contract_form_view" model="ir.ui.view">
+        <field name="name">inherited.hr.contract.form.view</field>
+        <field name="model">hr.contract</field>
+        <field name="inherit_id" ref="hr_contract.hr_contract_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//page[@name='information']/group/group[@name='salary_and_advantages']//div[1]" position="after">
+                <label for="mobile_allowances"/>
+                <div class="o_row" name="mobile_allowances">
+                    <field name="mobile_allowances" nolabel="1"/>
+                    <span>/ month</span>
+                </div>
+                <label for="travelling_allowances"/>
+                <div class="o_row" name="travelling_allowances">
+                    <field name="travelling_allowances" nolabel="1"/>
+                    <span>/ month</span>
+                </div>
+                <label for="laundry_allowances"/>
+                <div class="o_row" name="laundry_allowances">
+                    <field name="laundry_allowances" nolabel="1"/>
+                    <span>/ month</span>
+                </div>
+
+                <label for="gross_salary"/>
+                <div class="o_row" name="gross_salary">
+                    <field name="gross_salary" nolabel="1"/>
+                    <span>/ month</span>
+                </div>
+            </xpath>
+        </field>
+    </record>
+
+    <!--***** HR Contract Tree View *****-->
+    <record id="inherited_hr_contract_tree_view" model="ir.ui.view">
+        <field name="name">inherited.hr.contract.tree.view</field>
+        <field name="model">hr.contract</field>
+        <field name="inherit_id" ref="hr_contract.hr_contract_view_tree"/>
+        <field name="arch" type="xml">
+            <field name="kanban_state" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </field>
+            <field name="state" position="after">
+                <field name="wage"/>
+                <field name="mobile_allowances" string="Mobile"/>
+                <field name="travelling_allowances" string="Travelling"/>
+                <field name="laundry_allowances" string="Laundry"/>
+                <field name="gross_salary" string="Gross"/>
+            </field>
+        </field>
+    </record>
+
+
+</odoo>

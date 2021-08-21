@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <template id="police_verification_report">
+            <t t-call="web.html_container">
+                <t t-foreach="docs" t-as="doc">
+                    <t t-call="web.external_layout" style="font-family:georgia,garamond,serif;font-size:10px">
+                        <div class="page">
+                            <!--                            <div style="width: 10%;display: table-cell;border: #404040 1px solid;">-->
+                            <!--                                <img t-if="doc.image_1920" t-att-src="'data:image/png;base64,%s' % to_text(doc.image_1920)" style="max-height:60px;align:right"/>-->
+                            <!--                            </div>-->
+                            <p style="font-size:18px;text-align:left;">
+                                To
+                            </p>
+                            <p style="font-size:18px;text-align:left;">
+                                SHO
+                            </p>
+                            <p>
+                                POLICE STATION
+                            </p>
+                            <br />
+
+                            <p style="font-size:20px;font-weight:bold;text-align:center;text-decoration: underline;">
+                                REQUEST OF POLICE VERIFICATION FOR NOHA GROUP
+                            </p>
+
+                            <table class="table table-condensed" width="100%" style="padding-top: 1px;">
+                                <tr>
+                                    <td width="25%">Name:</td>
+                                    <td>
+                                        <span t-esc="doc.name"/>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td width="25%">Father Name:</td>
+                                    <td>
+                                        <span t-esc="doc.father_name"/>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td width="25%">CNIC:</td>
+                                    <td>
+                                        <span t-esc="doc.cnic"/>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td width="25%">Current Address:</td>
+                                    <td>
+                                        <span t-esc="doc.employee_address"/>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td width="25%">MOBILE NO:</td>
+                                    <td>
+                                        <span t-esc="doc.mobile_phone"/>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td width="25%">DOB:</td>
+                                    <td>
+                                        <span t-field="doc.birthday" t-field-options='{"format": "dd-mm-yyyy"}'/>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td width="25%">POST APPLIED FOR:</td>
+                                    <td>
+                                        <span t-esc="doc.job_id.name"/>
+                                    </td>
+                                </tr>
+                            </table>
+
+                            <p style="font-size:20px;font-weight:bold;text-align:center;text-decoration: underline;">
+                                HR OFFICER NOHA GROUP
+                            </p>
+
+                            <p style="font-size:16px;font-weight:bold;text-align:left;">
+                                RES. VERIFICATION 1:_________________________________________________________________________________________
+                                ____________________________________________________________________________________________________________________________
+                            </p>
+
+                            <p style="font-size:16px;font-weight:bold;text-align:left;">
+                                RES. VERIFICATION 2:_________________________________________________________________________________________
+                                ____________________________________________________________________________________________________________________________
+                            </p>
+
+                            <p style="font-size:16px;font-weight:bold;text-align:center;text-decoration-line: underline;">
+                                AFFIRMATION
+                            </p>
+
+                            <p>
+                                I solemnly affirm that information given above is true and correct to the best of my knowledge and believe.
+                            </p>
+
+                            <div class="row">
+                                <div class="col-6" style="text-align:left;">
+                                    DATE:________________________</div>
+                                <div class="col-6" style="text-align:right;">
+                                    SIGNATURE:______________________</div>
+                            </div>
+
+                            <p style="font-size:16px;font-weight:bold;text-align:left;">
+                                REQUEST FOR POLICE VERIFICATION::_________________________________________________________________________________________________________
+                                ____________________________________________________________________________________________________________________________
+
+                            </p>
+
+                            <p style="font-size:16px;font-weight:bold;text-align:right;">
+                                SIGNATURE/SEAL
+                            </p>
+
+                        </div>
+
+                    </t>
+                </t>
+            </t>
+        </template>
+
+    </data>
+</odoo>

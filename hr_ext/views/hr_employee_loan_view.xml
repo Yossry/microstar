@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <!-- hr_loan Tree  -->
+        <record id="hr_loan_tree_view" model="ir.ui.view">
+            <field name="name">hr.loan.tree</field>
+            <field name="model">hr.loan</field>
+            <field name="arch" type="xml">
+                <tree string="Employee Loan Request" decoration-info="state == 'draft'" decoration-primary="state == 'validate'" decoration-success="state == 'paid'">
+                    <field name="name"/>
+                    <field name="employee_code"/>
+                    <field name="employee_id"/>
+                    <field name="basic_pay"/>
+                    <field name="loan_id" options="{'no_quick_create':True, 'no_create_edit': True, 'limit': 10}"/>
+                    <field name="remaining_debt" sum="remaining_debt_amount"/>
+                    <field name="amount" sum="sum_amount"/>
+                    <field name="state" widget="badge" decoration-info="state == 'draft'" decoration-primary="state == 'validate'" decoration-success="state == 'paid'"/>
+                </tree>
+            </field>
+        </record>
+
+        <!-- hr_loan Form -->
+        <record id="hr_loan_form_view" model="ir.ui.view">
+            <field name="name">hr.loan.form</field>
+            <field name="model">hr.loan</field>
+            <field name="arch" type="xml">
+                <form string="Loan">
+                    <header>
+                        <button name="loan_confirm" type="object" string="Confirm" states="draft" groups="base.group_user" class="oe_highlight"/>
+                        <button name="loan_pay" type="object" string="Pay Loan" states="validate" groups="base.group_user" class="oe_highlight"/>
+                        <field name="state" widget="statusbar" nolabel="1"/>
+                    </header>
+                    <sheet>
+                        <group col="4">
+                            <field name="employee_id" required="1"
+                                   options="{'no_quick_create':True, 'no_create_edit': True, 'limit': 10}"/>
+                            <field name="employee_code"/>
+                            <field name="loan_id" required="1"
+                                   options="{'no_quick_create':True, 'no_create_edit': True, 'limit': 10}"/>
+                            <field name="basic_pay"/>
+                        </group>
+                        <separator string='Information Loan Amount' colspan='4'/>
+
+                        <group>
+                            <group>
+                                <field name="amount"/>
+                                <field name="num_quotas"/>
+                                <field name="amount_quota"/>
+                            </group>
+                            <group>
+                                <field name="paid_quotas"/>
+                                <field name="paid_amount"/>
+                                <field name="remaining_debt"/>
+                            </group>
+                            <group string='Date of Payment of the Loan'>
+                                <field name="date_payment"/>
+                                <field name="date_start" required="1"/>
+                                <field name="date_order" readonly="1"/>
+                            </group>
+
+                            <group string='Accounting Entry'>
+                                <field name="journal_id" options="{'no_quick_create':True, 'no_create_edit': True, 'limit': 10}"/>
+                                <field name="payment_channel" widget="radio"/>
+                                <field name="debit_account_id" options="{'limit': 10, 'no_create': 1, 'no_create_edit': 1}" attrs="{'readonly': [('state' , '!=', 'draft')]}"/>
+                                <field name="credit_account_id" options="{'limit': 10, 'no_create': 1, 'no_create_edit': 1}" attrs="{'readonly': [('state' , '!=', 'draft')]}"/>
+                                <field name="move_id" options="{'no_quick_create':True, 'no_create_edit': True, 'limit': 10}"/>
+                            </group>
+                        </group>
+                        <group string="Note">
+                            <field name="note" nolabel="1" colspan="4"/>
+                        </group>
+
+                        <notebook>
+                            <page string="Loan Installments">
+                                <field name="loan_line_ids">
+                                    <tree string="Loan Line" editable="bottom">
+                                        <field name="paid_date"/>
+                                        <field name="paid_amount"/>
+                                        <field name="paid" readonly="1"/>
+                                        <field name="notes"/>
+                                    </tree>
+                                </field>
+
+                                <group class="oe_subtotal_footer oe_right">
+                                    <field name="total_amount" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                                    <div>
+                                        <label for="paid_amount"/>
+                                    </div>
+                                    <field name="paid_amount" nolabel="1" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                                    <field name="balance_amount" class="oe_subtotal_footer_separator" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                                </group>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids" widget="mail_followers" groups="base.group_user"/>
+                        <field name="activity_ids" widget="mail_activity"/>
+                        <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <!-- hr_loan Search -->
+        <record id="hr_loan_filter_view" model="ir.ui.view">
+            <field name="name">hr.loan.select</field>
+            <field name="model">hr.loan</field>
+            <field name="arch" type="xml">
+                <search string="Search loans">
+                    <field name="employee_code"/>
+                    <field name="employee_id"/>
+                    <field name="loan_id"/>
+                    <field name="date_start"/>
+                    <field name="state"/>
+                    <field name="date_order"/>
+
+                    <filter string="Draft" name="filter_draft" domain="[('state','=','draft')]"/>
+                    <filter string="Confirmed" name="filter_validated" domain="[('state','=','validate')]"/>
+                    <filter string="Paid" name="filter_paid" domain="[('state','=','paid')]"/>
+                    <filter string="Payment Date" name="filter_payment_date" date="date_payment"/>
+                    <filter string="Start Date" name="filter_start_date" date="date_start"/>
+
+                    <group expand="0" string="Group By...">
+                        <filter string="Employee" name="employee_id" domain="[]" context="{'group_by':'employee_id'}"/>
+                        <filter string="Payment Date" name="group_date" domain="[]" context="{'group_by':'date_payment'}"/>
+                        <filter string="Start Date" name="group_start_date" domain="[]" context="{'group_by':'date_start'}"/>
+                        <filter string="Status" name="groupby_status" domain="[]" context="{'group_by':'state'}"/>
+                    </group>
+
+                    <searchpanel>
+                        <field name="state"/>
+                        <field name="payment_channel"/>
+                    </searchpanel>
+                </search>
+            </field>
+        </record>
+
+        <record id="hr_loan_pivot_view" model="ir.ui.view">
+            <field name="name">hr.loan.pivot</field>
+            <field name="model">hr.loan</field>
+            <field name="arch" type="xml">
+                <pivot string="Employee Loans" display_quantity="true">
+                    <field name="date_payment" interval="month" type="col"/>
+                    <field name="paid_amount" type="measure" widget="monetary"/>
+                </pivot>
+            </field>
+        </record>
+
+        <record id="hr_loan_graph_view" model="ir.ui.view">
+            <field name="name">hr.loan.graph</field>
+            <field name="model">hr.loan</field>
+            <field name="arch" type="xml">
+                <graph string="Employee Loans">
+                    <field name="date_payment" interval="month" type="col"/>
+                    <field name="paid_amount" type="measure" widget="monetary"/>
+                </graph>
+            </field>
+        </record>
+
+        <!-- hr_loan action -->
+        <record id="hr_loan_action_view" model="ir.actions.act_window">
+            <field name="name">Employee Loans</field>
+            <field name="res_model">hr.loan</field>
+            <field name="view_mode">tree,form,pivot,graph</field>
+            <field name="search_view_id" ref="hr_loan_filter_view"/>
+        </record>
+
+        <menuitem
+                name="Employee Loans"
+                id="menu_action_hr_loan"
+                action="hr_loan_action_view"
+                parent="menu_hr_loan_main_menu"
+                sequence="20"
+                groups="hr.group_hr_manager,hr_payroll.group_hr_payroll_manager"/>
+
+    </data>
+</odoo>
+
