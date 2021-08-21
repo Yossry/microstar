@@ -182,12 +182,13 @@ class HrPayslip(models.Model):
             }
             res.append(attendance_line)
 
-        unpaid_time_off_recs = self.env['hr.leave'].search([('employee_id', '=', self.employee_id.id),
-                                                            ('request_date_from', '>=', self.date_from),
-                                                            ('request_date_to', '<=', self.date_to),
-                                                            ('state', '=', 'validate'),
-                                                            '|', ('holiday_status_id.name', '=', 'Unpaid'),
-                                                            ('holiday_status_id.work_entry_type_id.name', '=', 'Unpaid')])
+        unpaid_time_off_recs = False
+        # unpaid_time_off_recs = self.env['hr.leave'].search([('employee_id', '=', self.employee_id.id),
+        #                                                     ('request_date_from', '>=', self.date_from),
+        #                                                     ('request_date_to', '<=', self.date_to),
+        #                                                     ('state', '=', 'validate'),
+        #                                                     '|', ('holiday_status_id.name', '=', 'Unpaid'),
+        #                                                     ('holiday_status_id.work_entry_type_id.name', '=', 'Unpaid')])
         if unpaid_time_off_recs:
             for unpaid_time_off_rec in unpaid_time_off_recs:
                 total_leaves += unpaid_time_off_rec.number_of_days
@@ -245,8 +246,8 @@ class HrPayslip(models.Model):
     def action_payslip_done(self):
         if not self.env.context.get('without_compute_sheet'):
             self.compute_sheet()
-            template = self.env.ref('aarsol_hr_ext.email_template_payslip')
-            send = template.send_mail(self.id, force_send=True)
+            # template = self.env.ref('aarsol_hr_ext.email_template_payslip')
+            # send = template.send_mail(self.id, force_send=True)
         return self.write({'state': 'done'})
 
 
