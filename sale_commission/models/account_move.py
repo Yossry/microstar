@@ -2,6 +2,8 @@
 # Copyright 2020 Tecnativa - Manuel Calero
 # License AGPL-3.0 or later (https://www.gnu.org/licenses/agpl).
 
+from lxml import etree
+
 from odoo import _, api, exceptions, fields, models
 
 
@@ -9,7 +11,9 @@ class AccountMove(models.Model):
     _inherit = "account.move"
 
     commission_total = fields.Float(
-        string="Commissions", compute="_compute_commission_total", store=True,
+        string="Commissions",
+        compute="_compute_commission_total",
+        store=True,
     )
     settlement_id = fields.Many2one(
         comodel_name="sale.commission.settlement",
@@ -25,17 +29,49 @@ class AccountMove(models.Model):
                 record.commission_total += sum(x.amount for x in line.agent_ids)
 
     def button_cancel(self):
-        """Put settlements associated to the invoices in exception."""
+        """Put settlements associated to the invoices in exception
+        and check settled lines"""
+        if any(self.mapped("invoice_line_ids.any_settled")):
+            raise exceptions.ValidationError(
+                _("You can't cancel an invoice with settled lines"),
+            )
         self.settlement_id.state = "except_invoice"
         return super().button_cancel()
 
-    def post(self):
+    def action_post(self):
         """Put settlements associated to the invoices in invoiced state."""
         self.settlement_id.state = "invoiced"
-        return super().post()
+        return super().action_post()
 
     def recompute_lines_agents(self):
         self.mapped("invoice_line_ids").recompute_agents()
+
+    @api.model
+    def fields_view_get(
+        self, view_id=None, view_type="form", toolbar=False, submenu=False
+    ):
+        """Inject in this method the needed context for not removing other
+        possible context values.
+        """
+        res = super(AccountMove, self).fields_view_get(
+            view_id=view_id,
+            view_type=view_type,
+            toolbar=toolbar,
+            submenu=submenu,
+        )
+        if view_type == "form":
+            invoice_xml = etree.XML(res["arch"])
+            invoice_line_fields = invoice_xml.xpath("//field[@name='invoice_line_ids']")
+            if invoice_line_fields:
+                invoice_line_field = invoice_line_fields[0]
+                context = invoice_line_field.attrib.get("context", "{}").replace(
+                    "{",
+                    "{'partner_id': partner_id, ",
+                    1,
+                )
+                invoice_line_field.attrib["context"] = context
+                res["arch"] = etree.tostring(invoice_xml)
+        return res
 
 
 class AccountMoveLine(models.Model):
@@ -57,7 +93,7 @@ class AccountMoveLine(models.Model):
     def _compute_agent_ids(self):
         self.agent_ids = False  # for resetting previous agents
         for record in self.filtered(
-            lambda x: x.move_id.partner_id and x.move_id.type[:3] == "out"
+            lambda x: x.move_id.partner_id and x.move_id.move_type[:3] == "out"
         ):
             if not record.commission_free and record.product_id:
                 record.agent_ids = record._prepare_agents_vals_partner(
@@ -78,7 +114,10 @@ class AccountInvoiceLineAgent(models.Model):
         store=True,
     )
     invoice_date = fields.Date(
-        string="Invoice date", related="invoice_id.date", store=True, readonly=True,
+        string="Invoice date",
+        related="invoice_id.date",
+        store=True,
+        readonly=True,
     )
     agent_line = fields.Many2many(
         comodel_name="sale.commission.settlement.line",
@@ -89,9 +128,14 @@ class AccountInvoiceLineAgent(models.Model):
     )
     settled = fields.Boolean(compute="_compute_settled", store=True)
     company_id = fields.Many2one(
-        comodel_name="res.company", compute="_compute_company", store=True,
+        comodel_name="res.company",
+        compute="_compute_company",
+        store=True,
     )
-    currency_id = fields.Many2one(related="object_id.currency_id", readonly=True,)
+    currency_id = fields.Many2one(
+        related="object_id.currency_id",
+        readonly=True,
+    )
 
     @api.depends("object_id.price_subtotal", "object_id.product_id.commission_free")
     def _compute_amount(self):
@@ -104,7 +148,7 @@ class AccountInvoiceLineAgent(models.Model):
                 inv_line.quantity,
             )
             # Refunds commissions are negative
-            if line.invoice_id.type and "refund" in line.invoice_id.type:
+            if line.invoice_id.move_type and "refund" in line.invoice_id.move_type:
                 line.amount = -line.amount
 
     @api.depends(
@@ -127,15 +171,17 @@ class AccountInvoiceLineAgent(models.Model):
     def _check_settle_integrity(self):
         for record in self:
             if any(record.mapped("settled")):
-                raise exceptions.ValidationError(_("You can't modify a settled line"),)
+                raise exceptions.ValidationError(
+                    _("You can't modify a settled line"),
+                )
 
     def _skip_settlement(self):
-        """This function should return if the commission can be payed.
+        """This function should return False if the commission can be paid.
 
         :return: bool
         """
         self.ensure_one()
         return (
             self.commission_id.invoice_state == "paid"
-            and self.invoice_id.invoice_payment_state != "paid"
+            and self.invoice_id.payment_state not in ["in_payment", "paid"]
         ) or self.invoice_id.state != "posted"
