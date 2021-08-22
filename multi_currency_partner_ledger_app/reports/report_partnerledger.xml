@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="report_partnerledger">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="web.external_layout">
+                    <div class="page">
+                        <div style="background-color: #008B8B; color:#fff !important; font:25px lucida-console,sans-serif !important;font-weight: bold;">
+                            <strong>
+                                <div style="border: 1px solid black;">
+                                    <center> Partner Ledger </center>
+                                </div>
+                            </strong>
+                        </div>
+                        <div class="row mt32 mb32">
+                            <div class="col-6">
+                                <strong>Partner's Account :</strong>
+                                <t t-if="extra['account_type'] == 'customer'">Receivable Accounts</t>
+                                <t t-if="extra['account_type'] == 'supplier'">Payable Accounts</t>
+                                <t t-if="extra['account_type'] == 'customer_supplier'">Receivable and Payable Accounts</t>
+                                <br />
+                                <t t-if="extra['date_from']">
+                                    <strong>Start Date :</strong>
+                                    <span t-esc="extra['date_from']"/>
+                                </t>
+                            </div>
+                            <div class="col-6">
+                                <strong>Target Moves :</strong>
+                                <t t-if="extra['target_move'] == 'all'">All Entries</t>
+                                <t t-if="extra['target_move'] == 'posted'">All Posted Entries</t>
+                                <br />
+                                <t t-if="extra['date_to']">
+                                    <strong>End Date :</strong>
+                                    <span t-esc="extra['date_to']"/>
+                                </t>
+                            </div>
+                        </div>
+                        
+                        <table class="table table-condensed">
+                            <thead>
+                                <tr>
+                                    <th></th>
+                                    <th></th>
+                                    <th>JRNL</th>
+                                    <th>Account</th>
+                                    <th>Ref</th>
+                                    <th>Due Date</th>
+                                    <th style="text-align:right;">Amount In Currency</th>
+                                    <th style="text-align:right;">Debit</th>
+                                    <th style="text-align:right;">Credit</th>
+                                    <t t-if="extra['reconciled'] == True">
+                                        <th style="text-align:right;">Balance</th>
+                                    </t>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td colspan="7">
+                                        <strong t-esc="o.name"/>
+                                    </td>
+                                    <td class="text-right">
+                                        <span t-if="sum_partner(data, o, extra['currency_ids'])">
+                                            <strong t-esc="sum_partner(data, o, extra['currency_ids'])[0]['total_debit']"
+                                                t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/>
+                                        </span>
+                                    </td>
+                                    <td class="text-right">
+                                        <span t-if="sum_partner(data, o, extra['currency_ids'])">
+                                            <strong t-esc="sum_partner(data, o, extra['currency_ids'])[0]['total_credit']"
+                                                t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/>
+                                        </span>
+                                    </td>
+                                    <t t-if="extra['reconciled'] == True">
+                                        <td class="text-right">
+                                            <span t-if="sum_partner(data, o, extra['currency_ids'])">
+                                                <strong t-esc="sum_partner(data, o, extra['currency_ids'])[0]['total_balance']"
+                                                    t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/>
+                                            </span>
+                                        </td>
+                                    </t>
+                                </tr>
+                                <t t-foreach="extra['currency_ids']" t-as="currency">
+                                    <tr>
+                                        <td colspan="10">
+                                            <strong t-esc="currency.name"/>
+                                        </td>
+                                    </tr>
+                                    <tr t-foreach="lines(data, o, currency)" t-as="line">
+                                        <td colspan="2">
+                                            <span t-esc="line['date']"/>
+                                        </td>
+                                        <td>
+                                            <span t-esc="line['code']"/>
+                                        </td>
+                                        <td>
+                                            <span t-esc="line['a_code']"/>
+                                        </td>
+                                        <td>
+                                            <span t-esc="line['displayed_name']"/>
+                                        </td>
+                                        <td>
+                                            <span t-esc="line['date_due']"/>
+                                        </td>
+                                        <td class="text-right">
+                                            <span t-esc="'%.2f'%(line['amount_currency']) or 0.00"/>
+                                        </td>
+                                        <td class="text-right">
+                                            <span t-esc="line['currency_id']"/>
+                                            <span t-esc="'%.2f'%(line['debit']) or 0.00"/>
+                                        </td>
+                                        <td class="text-right">
+                                            <span t-esc="line['currency_id']"/>
+                                            <span t-esc="'%.2f'%(-line['credit']) or 0.00"/>
+                                        </td>
+                                        <t t-if="extra['reconciled'] == True">
+                                            <td class="text-right">
+                                                <span t-esc="line['currency_id']"/>
+                                                <span t-esc="'%.2f'%(line['progress']) or 0.00"/>
+                                            </td>
+                                        </t>
+                                    </tr>
+                                </t>
+                            </tbody>
+                        </table>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+
+</odoo>
