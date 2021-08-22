@@ -9,13 +9,13 @@
                             <div class="col-xs-12" style="padding:2px;"/> <!--Spacing-->
 
                             <div class="col-xs-12" style="padding-left:0px; padding-right:0px; padding-top:5px; padding-bottom:0px; height: 60px;">
-                                <t t-if="o.voucher_type">
-                                    <div t-attf-style="float:left; margin-top:0px;padding-top:0px;padding-left:15px;padding-right:15px; border:1px solid;">
-                                        <h4 id="voucher_type" style="margin-bottom:10px;">
-                                            <span t-field="o.voucher_type"/>
-                                        </h4>
-                                    </div>
-                                </t>
+<!--                                <t t-if="o.voucher_type">-->
+<!--                                    <div t-attf-style="float:left; margin-top:0px;padding-top:0px;padding-left:15px;padding-right:15px; border:1px solid;">-->
+<!--                                        <h4 id="voucher_type" style="margin-bottom:10px;">-->
+<!--                                            <span t-field="o.voucher_type"/>-->
+<!--                                        </h4>-->
+<!--                                    </div>-->
+<!--                                </t>-->
 
                                 <div t-attf-style="float:right; margin-top:0px;padding-top:0px;padding-left:15px;padding-right:15px;}} !important; border:1px solid;}">
                                     <h4 id="title" style="margin-bottom:10px;">
