@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <template id="aarsol_journal_entry_report.journal_data">
+            <div class="col-xs-12" t-attf-style="text-align:center; padding-left:0px; padding-right:0px;">
+                <div t-attf-style="width:auto; display:inline-block; padding-left:8px; padding-right:8px;">
+                    <h3 style="margin-top:8px; margin-bottom:5px;"></h3>
+                </div>
+            </div>
+
+            <div class="col-xs-12" style="padding:8px;"/>
+            <t t-set="col_span" t-value="7"/>
+            <table class="table  table-condensed">
+                <thead>
+                    <t t-set="th_style" t-value="'border-bottom: 1px solid #ddd !important;white-space:nowrap;'"></t>
+                    <tr t-attf-style="background-color:#f6f6f6;color:black;">
+                        <th t-attf-style="{{th_style}}">
+                            <i class="fa fa-list-ol"></i>
+                        </th>
+                        <th t-attf-style="{{th_style}}">
+                            <i class="fa fa-info-circle"></i>
+                            Account
+                        </th>
+                        <th t-attf-style="{{th_style}}">
+                            <i class="fa fa-sort-amount-asc">Code</i>
+                        </th>
+                        <th t-attf-style="{{th_style}}">
+                            <i class="fa fa-th-large">Account Name</i>
+                        </th>
+                        <th t-attf-style="{{th_style}}">
+                            <i class="fa fa-th-large">Narration</i>
+                        </th>
+                        <th class="text-right" t-attf-style="{{th_style}}">
+                            <i class="fa fa-money">Debit</i>
+                        </th>
+                        <th class="text-right" t-attf-style="{{th_style}}">
+                            <i class="fa fa-money">Credit</i>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                    <t t-foreach="o.line_ids" t-as="l">
+
+                        <tr t-attf-style="page-break-inside: avoid;font-size:12px;">
+                            <td>
+                                <span t-esc="l_index + 1"/>
+                            </td>
+                            <td>GL</td>
+                            <td>
+                                <span t-field="l.account_id.code"/>
+                            </td>
+                            <td>
+                                <span t-field="l.account_id.name"/>
+                            </td>
+                            <td>
+                                <span t-field="l.name"/>
+                            </td>
+                            <td class="text-right">
+                                <span t-esc="l.debit and '{0:,.2f}'.format(l.debit) or '-'"/>
+                            </td>
+                            <td class="text-right">
+                                <span t-esc="l.credit and '{0:,.2f}'.format(l.credit) or '-'"/>
+                            </td>
+                        </tr>
+                    </t>
+                </tbody>
+            </table>
+
+            <div class="row col-xs-5 pull-right" style="padding-left:0px; padding-right:0px; page-break-inside: avoid;">
+                <table class="table table-condensed">
+                    <tbody>
+                        <tr t-attf-style="border-top: 1px solid;">
+                            <td t-attf-style="border-top: 1px solid;">
+                                <strong>Total Transaction</strong>
+                            </td>
+                            <td class="text-right" t-attf-style="border-top: 1px solid;">
+                                <span t-field="o.currency_id.symbol"/>
+                                <span t-esc="o.amount_total_signed and '{0:,.2f}'.format(o.amount_total_signed) or '-'"/>/-
+
+                            </td>
+                        </tr>
+
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- Amount in words -->
+            <div class="col-7 float-left" style="padding-left:0px; padding-right:0px; padding-top:5px; page-break-inside: avoid;">
+                <p>
+                    <strong>Amount in Words:</strong>
+                    <span style="text-decoration:underline;" t-esc="o.currency_id.amount_to_text(int(o.amount_total_signed))"/>
+                    <span style="text-decoration:underline;">s</span>
+                </p>
+            </div>
+
+
+            <div class="col-xs-12" style="padding-top:50px;padding-left:0px; padding-right:0px; margin-top:15px; page-break-inside: avoid;">
+                <table class="table table-condensed">
+                    <tbody>
+                        <tr t-attf-style="border-top: 1px solid;">
+                            <td t-attf-style="border-top: 1px solid;text-align:left;">
+                                <strong>
+                                    Prepared By:
+                                    <span t-esc="request.env.user.name"/>
+                                </strong>
+
+                            </td>
+                            <td t-attf-style="border-top: 1px;text-align:center;">
+                                <strong>Approved By</strong>
+                            </td>
+
+                            <td t-attf-style="border-top: 1px;text-align:right;">
+                                <strong>Accounts Manager</strong>
+                            </td>
+                        </tr>
+
+                    </tbody>
+                </table>
+            </div>
+
+        </template>
+    </data>
+</odoo>

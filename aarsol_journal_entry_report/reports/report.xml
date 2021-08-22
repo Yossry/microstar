@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+
+        <report
+                id="report_journal_entry"
+                model="account.move"
+                string="Journal Entry"
+                report_type="qweb-html"
+                name="aarsol_journal_entry_report.journal_entry"
+                file="aarsol_journal_entry_report.journal_entry"
+        />
+    </data>
+</odoo>
