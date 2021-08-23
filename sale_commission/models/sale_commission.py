@@ -8,30 +8,21 @@ class SaleCommission(models.Model):
     _description = "Commission in sales"
 
     name = fields.Char("Name", required=True)
-    commission_type = fields.Selection(
-        selection=[("fixed", "Fixed percentage"), ("section", "By sections")],
-        string="Type",
-        required=True,
-        default="fixed",
+    commission_type = fields.Selection(selection=[("fixed", "Fixed percentage"),
+                                                  ("section", "By sections"),
+                                                  ('fixed_amount', 'Fixed Amount')
+                                                  ], string="Type", required=True, default="fixed",
     )
     fix_qty = fields.Float(string="Fixed percentage")
-    section_ids = fields.One2many(
-        string="Sections",
-        comodel_name="sale.commission.section",
-        inverse_name="commission_id",
-    )
+    section_ids = fields.One2many(string="Sections", comodel_name="sale.commission.section", inverse_name="commission_id", )
     active = fields.Boolean(default=True)
-    invoice_state = fields.Selection(
-        [("open", "Invoice Based"), ("paid", "Payment Based")],
-        string="Invoice Status",
-        required=True,
-        default="open",
+    invoice_state = fields.Selection([("open", "Invoice Based"),
+                                      ("paid", "Payment Based")
+                                      ], string="Invoice Status", required=True, default="open",
     )
-    amount_base_type = fields.Selection(
-        selection=[("gross_amount", "Gross Amount"), ("net_amount", "Net Amount")],
-        string="Base",
-        required=True,
-        default="gross_amount",
+    amount_base_type = fields.Selection(selection=[("gross_amount", "Gross Amount"),
+                                                   ("net_amount", "Net Amount")
+                                                   ], string="Base", required=True, default="gross_amount",
     )
 
     def calculate_section(self, base):

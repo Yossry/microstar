@@ -12,9 +12,7 @@ class SaleCommissionMakeSettle(models.TransientModel):
     _description = "Wizard for settling commissions in invoices"
 
     date_to = fields.Date("Up to", required=True, default=fields.Date.today())
-    agent_ids = fields.Many2many(
-        comodel_name="res.partner", domain="[('agent', '=', True)]"
-    )
+    agent_ids = fields.Many2many(comodel_name="res.partner", domain="[('agent', '=', True)]")
 
     def _get_period_start(self, agent, date_to):
         if agent.settlement == "monthly":

@@ -49,9 +49,9 @@ class SaleCommissionMixin(models.AbstractModel):
         for line in self:
             if line.commission_free:
                 line.commission_status = _("Comm. free")
-            elif len(line.agent_ids) == 0:
+            elif len(line.agent_ids)==0:
                 line.commission_status = _("No commission agents")
-            elif len(line.agent_ids) == 1:
+            elif len(line.agent_ids)==1:
                 line.commission_status = _("1 commission agent")
             else:
                 line.commission_status = _("%s commission agents") % (
@@ -137,14 +137,16 @@ class SaleCommissionLineMixin(models.AbstractModel):
         self.ensure_one()
         if product.commission_free or not commission:
             return 0.0
-        if commission.amount_base_type == "net_amount":
+        if commission.amount_base_type=="net_amount":
             # If subtotal (sale_price * quantity) is less than
             # standard_price * quantity, it means that we are selling at
             # lower price than we bought, so set amount_base to 0
             subtotal = max([0, subtotal - product.standard_price * quantity])
-        if commission.commission_type == "fixed":
+        if commission.commission_type=="fixed":
             return subtotal * (commission.fix_qty / 100.0)
-        elif commission.commission_type == "section":
+        if commission.commission_type=="fixed_amount":
+            return commission.fix_qty
+        elif commission.commission_type=="section":
             return commission.calculate_section(subtotal)
 
     @api.depends("agent_id")
