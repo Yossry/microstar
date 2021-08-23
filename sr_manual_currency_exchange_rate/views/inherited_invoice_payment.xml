@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record
+                id="view_account_payment_invoice_form_extends_add_manual_currency_exchange_rate"
+                model="ir.ui.view">
+            <field name="name">view.account.payment.invoice.form.extends.add.manual.currency.exchange.rate
+            </field>
+            <field name="model">account.payment</field>
+            <field name="inherit_id"
+                   ref="account.view_account_payment_form"/>
+            <field name="arch" type="xml">
+                <field name="journal_id" position="after">
+                    <field name="active_manual_currency_rate" invisible="1"></field>
+                    <field name="apply_manual_currency_exchange"
+                           attrs="{'invisible': [('active_manual_currency_rate', '=', False)]}"/>
+                    <field name="manual_currency_exchange_rate"
+                           attrs="{'invisible': ['|',('apply_manual_currency_exchange', '=', False),('active_manual_currency_rate', '=', False)],'required':[('apply_manual_currency_exchange', '=', True)]}"/>
+                </field>
+            </field>
+        </record>
+        <record id="account.action_account_payments_payable" model="ir.actions.act_window">
+            <field name="name">Payments</field>
+            <field name="res_model">account.payment</field>
+            <field name="view_mode">tree,kanban,form,graph</field>
+            <field name="context">{
+                'default_payment_type': 'outbound',
+                'default_partner_type': 'supplier',
+                'search_default_outbound_filter': 1,
+                'res_partner_search_mode': 'supplier',
+                'default_check_payment_from_dashboard': 1,
+                }
+            </field>
+            <field name="view_id" ref="account.view_account_supplier_payment_tree"/>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Register a payment
+                </p>
+                <p>
+                    Payments are used to register liquidity movements. You can process those payments by your own means
+                    or by using installed facilities.
+                </p>
+            </field>
+        </record>
+        <record id="account.action_account_payments" model="ir.actions.act_window">
+            <field name="name">Payments</field>
+            <field name="res_model">account.payment</field>
+            <field name="view_mode">tree,kanban,form,graph</field>
+            <field name="context">{
+                'default_payment_type': 'inbound',
+                'default_partner_type': 'customer',
+                'search_default_inbound_filter': 1,
+                'res_partner_search_mode': 'customer',
+                'default_check_payment_from_dashboard': 1,
+                }
+            </field>
+            <field name="view_id" ref="account.view_account_payment_tree"/>
+            <field name="help" type="html">
+                <p class="o_view_nocontent_smiling_face">
+                    Register a payment
+                </p>
+                <p>
+                    Payments are used to register liquidity movements. You can process those payments by your own means
+                    or by using installed facilities.
+                </p>
+            </field>
+        </record>
+    </data>
+</odoo>
