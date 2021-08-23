@@ -10,7 +10,7 @@
     'images': [
     ],
     'depends': [
-        'base', 'mail', 'product', 'purchase'
+        'base', 'mail', 'product', 'purchase', 'sale',
     ],
     'data': [
         'security/security.xml',
