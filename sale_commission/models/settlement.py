@@ -18,47 +18,20 @@ class Settlement(models.Model):
     total = fields.Float(compute="_compute_total", readonly=True, store=True)
     date_from = fields.Date(string="From")
     date_to = fields.Date(string="To")
-    agent_id = fields.Many2one(
-        comodel_name="res.partner", domain="[('agent', '=', True)]"
-    )
+    agent_id = fields.Many2one(comodel_name="res.partner", domain="[('agent', '=', True)]")
     agent_type = fields.Selection(related="agent_id.agent_type")
-    line_ids = fields.One2many(
-        comodel_name="sale.commission.settlement.line",
-        inverse_name="settlement_id",
-        string="Settlement lines",
-        readonly=True,
-    )
-    state = fields.Selection(
-        selection=[
-            ("settled", "Settled"),
-            ("invoiced", "Invoiced"),
-            ("cancel", "Canceled"),
-            ("except_invoice", "Invoice exception"),
-        ],
-        string="State",
-        readonly=True,
-        default="settled",
-    )
-    invoice_ids = fields.One2many(
-        comodel_name="account.move",
-        inverse_name="settlement_id",
-        string="Generated invoice",
-        readonly=True,
-    )
+    line_ids = fields.One2many(comodel_name="sale.commission.settlement.line", inverse_name="settlement_id", string="Settlement lines", readonly=True, )
+    state = fields.Selection(selection=[("settled", "Settled"),
+                                        ("invoiced", "Invoiced"),
+                                        ("cancel", "Canceled"),
+                                        ("except_invoice", "Invoice exception"),
+                                        ], string="State", readonly=True, default="settled", )
+    invoice_ids = fields.One2many(comodel_name="account.move", inverse_name="settlement_id", string="Generated invoice", readonly=True)
+
     # TODO: To be removed
-    invoice_id = fields.Many2one(
-        store=True,
-        comodel_name="account.move",
-        compute="_compute_invoice_id",
-    )
-    currency_id = fields.Many2one(
-        comodel_name="res.currency", readonly=True, default=_default_currency
-    )
-    company_id = fields.Many2one(
-        comodel_name="res.company",
-        default=lambda self: self.env.user.company_id,
-        required=True,
-    )
+    invoice_id = fields.Many2one(store=True, comodel_name="account.move", compute="_compute_invoice_id")
+    currency_id = fields.Many2one(comodel_name="res.currency", readonly=True, default=_default_currency)
+    company_id = fields.Many2one(comodel_name="res.company", default=lambda self: self.env.user.company_id, required=True, )
 
     @api.depends("line_ids", "line_ids.settled_amount")
     def _compute_total(self):
@@ -71,13 +44,13 @@ class Settlement(models.Model):
             record.invoice_id = record.invoice_ids[:1]
 
     def action_cancel(self):
-        if any(x.state != "settled" for x in self):
+        if any(x.state!="settled" for x in self):
             raise UserError(_("Cannot cancel an invoiced settlement."))
         self.write({"state": "cancel"})
 
     def unlink(self):
         """Allow to delete only cancelled settlements"""
-        if any(x.state == "invoiced" for x in self):
+        if any(x.state=="invoiced" for x in self):
             raise UserError(_("You can't delete invoiced settlements."))
         return super().unlink()
 
@@ -181,5 +154,5 @@ class SettlementLine(models.Model):
     def _check_company(self):
         for record in self:
             for line in record.agent_line:
-                if line.company_id != record.company_id:
+                if line.company_id!=record.company_id:
                     raise UserError(_("Company must be the same"))

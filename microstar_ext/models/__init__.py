@@ -4,3 +4,4 @@ from . import product_origin
 from . import product_usage
 from . import product_ext
 from . import purchase_ext
+from . import accounts
