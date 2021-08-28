@@ -28,6 +28,7 @@
     'data': [
         'views/gate_pass_details_views.xml',
         'report/gate_pass_template.xml',
+        'report/gate_pass_out_template.xml',
         'report/gate_pass_report.xml',
     ],
     'demo': [],

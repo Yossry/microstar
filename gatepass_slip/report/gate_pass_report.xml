@@ -16,13 +16,24 @@
             <field name="header_spacing">40</field>
             <field name="dpi">90</field>
         </record>
+
         <report
-            string="Gate Pass"
-            id="action_gatepass_generate"
-            model="stock.picking"
-            report_type="qweb-pdf"
-            name="gatepass_slip.report_gatepass_slip"
-            file="gatepass_slip.report_gatepass_slip"
-            paperformat="gatepass_slip.gatepass_slip_format"/>
+                string="IN Gate Pass"
+                id="action_gatepass_generate"
+                model="stock.picking"
+                report_type="qweb-pdf"
+                name="gatepass_slip.report_gatepass_slip"
+                file="gatepass_slip.report_gatepass_slip"
+                paperformat="gatepass_slip.gatepass_slip_format"/>
+
+
+        <report
+                string="OUT Gate Pass"
+                id="action_gatepass_generate_out"
+                model="stock.picking"
+                report_type="qweb-pdf"
+                name="gatepass_slip.report_gatepass_slip_out"
+                file="gatepass_slip.report_gatepass_slip_out"
+                paperformat="gatepass_slip.gatepass_slip_format"/>
     </data>
 </odoo>
