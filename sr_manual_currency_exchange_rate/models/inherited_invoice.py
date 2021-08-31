@@ -19,6 +19,7 @@
 #
 ##############################################################################
 from odoo import models, fields, api
+import pdb
 
 
 class AccountMove(models.Model):
