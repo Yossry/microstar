@@ -29,10 +29,10 @@ class AccountMove(models.Model):
     manual_currency_exchange_rate = fields.Float(string='Manual Currency Exchange Rate')
     active_manual_currency_rate = fields.Boolean('active Manual Currency', default=False)
 
-    @api.onchange('company_id','currency_id')
+    @api.onchange('company_id', 'currency_id')
     def onchange_currency_id(self):
         if self.company_id or self.currency_id:
-            if self.company_id.currency_id != self.currency_id:
+            if self.company_id.currency_id!=self.currency_id:
                 self.active_manual_currency_rate = True
             else:
                 self.active_manual_currency_rate = False
@@ -87,11 +87,19 @@ class AccountMove(models.Model):
         self.ref = ','.join(refs)
 
         # Compute _invoice_payment_ref.
-        if len(refs) == 1:
+        if len(refs)==1:
             self._invoice_payment_ref = refs[0]
 
         self.purchase_id = False
         self._onchange_currency()
+
+    @api.onchange('manual_currency_exchange_rate')
+    def onchange_manual_currency_exchange_rate(self):
+        for rec in self:
+            if rec.manual_currency_exchange_rate > 0:
+                if rec.line_ids:
+                    for line in rec.line_ids:
+                        line._get_fields_onchange_subtotal_model(line.price_subtotal, rec.move_type, rec.currency_id, rec.company_id, rec.invoice_date)
 
 
 class AccountMoveLine(models.Model):
@@ -116,7 +124,7 @@ class AccountMoveLine(models.Model):
         else:
             sign = 1
         price_subtotal *= sign
-        if currency and currency != company.currency_id:
+        if currency and currency!=company.currency_id:
             # Multi-currencies.
             if self.move_id.apply_manual_currency_exchange:
                 balance = price_subtotal / self.move_id.manual_currency_exchange_rate
@@ -134,4 +142,3 @@ class AccountMoveLine(models.Model):
                 'debit': price_subtotal > 0.0 and price_subtotal or 0.0,
                 'credit': price_subtotal < 0.0 and -price_subtotal or 0.0,
             }
-
