@@ -13,6 +13,8 @@
     "data": [
         "security/ir.model.access.csv",
         "security/sale_commission_security.xml",
+        "views/data.xml",
+
         "views/sale_commission_view.xml",
         "views/sale_commission_mixin_views.xml",
         "views/product_template_view.xml",
@@ -21,8 +23,11 @@
         "views/account_move_views.xml",
         "views/sale_commission_settlement_view.xml",
         "views/sale_commission_settlement_report.xml",
+
         "views/report_settlement_templates.xml",
         "report/sale_commission_analysis_report_view.xml",
+
+
         "wizard/wizard_settle.xml",
         "wizard/wizard_invoice.xml",
         "wizard/sale_commission_salary_input.xml",

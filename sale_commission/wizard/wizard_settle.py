@@ -15,41 +15,37 @@ class SaleCommissionMakeSettle(models.TransientModel):
     agent_ids = fields.Many2many(comodel_name="res.partner", domain="[('agent', '=', True)]")
 
     def _get_period_start(self, agent, date_to):
-        if agent.settlement == "monthly":
+        if agent.settlement=="monthly":
             return date(month=date_to.month, year=date_to.year, day=1)
-        elif agent.settlement == "quaterly":
+        elif agent.settlement=="quaterly":
             # Get first month of the date quarter
             month = (date_to.month - 1) // 3 * 3 + 1
             return date(month=month, year=date_to.year, day=1)
-        elif agent.settlement == "semi":
+        elif agent.settlement=="semi":
             if date_to.month > 6:
                 return date(month=7, year=date_to.year, day=1)
             else:
                 return date(month=1, year=date_to.year, day=1)
-        elif agent.settlement == "annual":
+        elif agent.settlement=="annual":
             return date(month=1, year=date_to.year, day=1)
 
     def _get_next_period_date(self, agent, current_date):
-        if agent.settlement == "monthly":
+        if agent.settlement=="monthly":
             return current_date + relativedelta(months=1)
-        elif agent.settlement == "quaterly":
+        elif agent.settlement=="quaterly":
             return current_date + relativedelta(months=3)
-        elif agent.settlement == "semi":
+        elif agent.settlement=="semi":
             return current_date + relativedelta(months=6)
-        elif agent.settlement == "annual":
+        elif agent.settlement=="annual":
             return current_date + relativedelta(years=1)
 
     def _get_settlement(self, agent, company, sett_from, sett_to):
-        return self.env["sale.commission.settlement"].search(
-            [
-                ("agent_id", "=", agent.id),
-                ("date_from", "=", sett_from),
-                ("date_to", "=", sett_to),
-                ("company_id", "=", company.id),
-                ("state", "=", "settled"),
-            ],
-            limit=1,
-        )
+        return self.env["sale.commission.settlement"].search([("agent_id", "=", agent.id),
+                                                              ("date_from", "=", sett_from),
+                                                              ("date_to", "=", sett_to),
+                                                              ("company_id", "=", company.id),
+                                                              ("state", "=", "settled"),
+                                                              ], limit=1)
 
     def _prepare_settlement_vals(self, agent, company, sett_from, sett_to):
         return {
@@ -74,18 +70,12 @@ class SaleCommissionMakeSettle(models.TransientModel):
         for agent in agents:
             date_to_agent = self._get_period_start(agent, date_to)
             # Get non settled invoices
-            agent_lines = agent_line_obj.search(
-                [
-                    ("invoice_date", "<", date_to_agent),
-                    ("agent_id", "=", agent.id),
-                    ("settled", "=", False),
-                ],
-                order="invoice_date",
-            )
+            agent_lines = agent_line_obj.search([("invoice_date", "<", date_to_agent),
+                                                 ("agent_id", "=", agent.id),
+                                                 ("settled", "=", False),
+                                                 ], order="invoice_date")
             for company in agent_lines.mapped("company_id"):
-                agent_lines_company = agent_lines.filtered(
-                    lambda r: r.object_id.company_id == company
-                )
+                agent_lines_company = agent_lines.filtered(lambda r: r.object_id.company_id==company)
                 pos = 0
                 sett_to = date(year=1900, month=1, day=1)
                 while pos < len(agent_lines_company):
@@ -95,29 +85,16 @@ class SaleCommissionMakeSettle(models.TransientModel):
                         continue
                     if line.invoice_date > sett_to:
                         sett_from = self._get_period_start(agent, line.invoice_date)
-                        sett_to = (
-                            self._get_next_period_date(
-                                agent,
-                                sett_from,
-                            )
-                            - timedelta(days=1)
-                        )
-                        settlement = self._get_settlement(
-                            agent, company, sett_from, sett_to
-                        )
+                        sett_to = (self._get_next_period_date(agent, sett_from) - timedelta(days=1))
+                        settlement = self._get_settlement(agent, company, sett_from, sett_to)
                         if not settlement:
                             settlement = settlement_obj.create(
-                                self._prepare_settlement_vals(
-                                    agent, company, sett_from, sett_to
-                                )
-                            )
+                                self._prepare_settlement_vals(agent, company, sett_from, sett_to))
                         settlement_ids.append(settlement.id)
-                    settlement_line_obj.create(
-                        {
-                            "settlement_id": settlement.id,
-                            "agent_line": [(6, 0, [line.id])],
-                        }
-                    )
+                    settlement_line_obj.create({
+                        "settlement_id": settlement.id,
+                        "agent_line": [(6, 0, [line.id])], })
+
         # go to results
         if len(settlement_ids):
             return {

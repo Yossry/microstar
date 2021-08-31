@@ -39,18 +39,11 @@ class AccountMove(models.Model):
         self.mapped("invoice_line_ids").recompute_agents()
 
     @api.model
-    def fields_view_get(
-            self, view_id=None, view_type="form", toolbar=False, submenu=False
-    ):
+    def fields_view_get(self, view_id=None, view_type="form", toolbar=False, submenu=False):
         """Inject in this method the needed context for not removing other
         possible context values.
         """
-        res = super(AccountMove, self).fields_view_get(
-            view_id=view_id,
-            view_type=view_type,
-            toolbar=toolbar,
-            submenu=submenu,
-        )
+        res = super(AccountMove, self).fields_view_get(view_id=view_id, view_type=view_type, toolbar=toolbar, submenu=submenu)
         if view_type=="form":
             invoice_xml = etree.XML(res["arch"])
             invoice_line_fields = invoice_xml.xpath("//field[@name='invoice_line_ids']")
@@ -67,10 +60,7 @@ class AccountMove(models.Model):
 
 
 class AccountMoveLine(models.Model):
-    _inherit = [
-        "account.move.line",
-        "sale.commission.mixin",
-    ]
+    _inherit = ["account.move.line", "sale.commission.mixin", ]
     _name = "account.move.line"
 
     agent_ids = fields.One2many(comodel_name="account.invoice.line.agent")
@@ -99,46 +89,18 @@ class AccountInvoiceLineAgent(models.Model):
     _description = "Agent detail of commission line in invoice lines"
 
     object_id = fields.Many2one(comodel_name="account.move.line")
-    invoice_id = fields.Many2one(
-        string="Invoice",
-        comodel_name="account.move",
-        related="object_id.move_id",
-        store=True,
-    )
-    invoice_date = fields.Date(
-        string="Invoice date",
-        related="invoice_id.date",
-        store=True,
-        readonly=True,
-    )
-    agent_line = fields.Many2many(
-        comodel_name="sale.commission.settlement.line",
-        relation="settlement_agent_line_rel",
-        column1="agent_line_id",
-        column2="settlement_id",
-        copy=False,
-    )
+    invoice_id = fields.Many2one(string="Invoice", comodel_name="account.move", related="object_id.move_id", store=True)
+    invoice_date = fields.Date(string="Invoice date", related="invoice_id.date", store=True, readonly=True)
+    agent_line = fields.Many2many(comodel_name="sale.commission.settlement.line", relation="settlement_agent_line_rel", column1="agent_line_id", column2="settlement_id", copy=False)
     settled = fields.Boolean(compute="_compute_settled", store=True)
-    company_id = fields.Many2one(
-        comodel_name="res.company",
-        compute="_compute_company",
-        store=True,
-    )
-    currency_id = fields.Many2one(
-        related="object_id.currency_id",
-        readonly=True,
-    )
+    company_id = fields.Many2one(comodel_name="res.company", compute="_compute_company", store=True)
+    currency_id = fields.Many2one(related="object_id.currency_id", readonly=True)
 
     @api.depends("object_id.price_subtotal", "object_id.product_id.commission_free")
     def _compute_amount(self):
         for line in self:
             inv_line = line.object_id
-            line.amount = line._get_commission_amount(
-                line.commission_id,
-                inv_line.price_subtotal,
-                inv_line.product_id,
-                inv_line.quantity,
-            )
+            line.amount = line._get_commission_amount(line.commission_id, inv_line.price_subtotal, inv_line.product_id, inv_line.quantity)
             # Refunds commissions are negative
             if line.invoice_id.move_type and "refund" in line.invoice_id.move_type:
                 line.amount = -line.amount
@@ -150,9 +112,7 @@ class AccountInvoiceLineAgent(models.Model):
         # Count lines of not open or paid invoices as settled for not
         # being included in settlements
         for line in self:
-            line.settled = any(
-                x.settlement_id.state!="cancel" for x in line.agent_line
-            )
+            line.settled = any(x.settlement_id.state!="cancel" for x in line.agent_line)
 
     @api.depends("object_id", "object_id.company_id")
     def _compute_company(self):

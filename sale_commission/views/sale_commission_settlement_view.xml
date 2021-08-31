@@ -4,18 +4,13 @@
         <field name="name">Settlements tree</field>
         <field name="model">sale.commission.settlement</field>
         <field name="arch" type="xml">
-            <tree
-                string="Settlements"
-                decoration-muted="state == 'invoiced'"
-                decoration-danger="state == 'cancel'"
-                create="false"
-            >
-                <field name="agent_id" />
-                <field name="company_id" groups="base.group_multi_company" />
-                <field name="date_from" />
-                <field name="date_to" />
-                <field name="total" sum="Settled total" />
-                <field name="state" />
+            <tree string="Settlements" decoration-muted="state == 'invoiced'" decoration-danger="state == 'cancel'" create="false">
+                <field name="agent_id"/>
+                <field name="company_id" groups="base.group_multi_company"/>
+                <field name="date_from"/>
+                <field name="date_to"/>
+                <field name="total" sum="Settled total"/>
+                <field name="state"/>
             </tree>
         </field>
     </record>
@@ -24,26 +19,26 @@
         <field name="model">sale.commission.settlement</field>
         <field name="arch" type="xml">
             <search string="Settlement search">
-                <field name="agent_id" />
-                <field name="date_from" />
-                <field name="date_to" />
-                <field name="company_id" />
+                <field name="agent_id"/>
+                <field name="date_from"/>
+                <field name="date_to"/>
+                <field name="company_id"/>
                 <filter
-                    string="This year"
-                    name="thisyear"
-                    domain="[('date_from', '&gt;=', time.strftime('%%Y-01-01')), ('date_to', '&lt;=', time.strftime('%%Y-12-31'))]"
+                        string="This year"
+                        name="thisyear"
+                        domain="[('date_from', '&gt;=', time.strftime('%%Y-01-01')), ('date_to', '&lt;=', time.strftime('%%Y-12-31'))]"
                 />
-                <separator />
+                <separator/>
                 <group expand="1" string="Group By">
                     <filter
-                        string="Agent"
-                        name="group_agent"
-                        context="{'group_by': 'agent_id'}"
+                            string="Agent"
+                            name="group_agent"
+                            context="{'group_by': 'agent_id'}"
                     />
                     <filter
-                        string="Date from month"
-                        name="group_date"
-                        context="{'group_by': 'date_from:month'}"
+                            string="Date from month"
+                            name="group_date"
+                            context="{'group_by': 'date_from:month'}"
                     />
                 </group>
             </search>
@@ -56,52 +51,52 @@
             <form string="Settlement" create="false">
                 <header>
                     <button
-                        string="Make invoice"
-                        attrs="{'invisible': ['|', ('state', '!=', 'settled'), ('agent_type', '!=', 'agent')]}"
-                        class="oe_highlight"
-                        type="object"
-                        name="action_invoice"
+                            string="Make invoice"
+                            attrs="{'invisible': ['|', ('state', '!=', 'settled'), ('agent_type', '!=', 'agent')]}"
+                            class="oe_highlight"
+                            type="object"
+                            name="action_invoice"
                     />
                     <button
-                        string="Cancel"
-                        states="settled"
-                        type="object"
-                        name="action_cancel"
+                            string="Cancel"
+                            states="settled"
+                            type="object"
+                            name="action_cancel"
                     />
-                    <field name="state" widget="statusbar" />
+                    <field name="state" widget="statusbar"/>
                 </header>
                 <group>
                     <group>
-                        <field name="agent_id" />
-                        <field name="date_from" />
+                        <field name="agent_id"/>
+                        <field name="date_from"/>
                         <field
-                            name="invoice_id"
-                            attrs="{'invisible': [('state', '!=', 'invoiced')]}"
+                                name="invoice_id"
+                                attrs="{'invisible': [('state', '!=', 'invoiced')]}"
                         />
                     </group>
                     <group>
-                        <field name="company_id" groups="base.group_multi_company" />
-                        <field name="date_to" />
-                        <field name="currency_id" invisible="1" />
-                        <field name="agent_type" invisible="1" />
+                        <field name="company_id" groups="base.group_multi_company"/>
+                        <field name="date_to"/>
+                        <field name="currency_id" invisible="1"/>
+                        <field name="agent_type" invisible="1"/>
                     </group>
                 </group>
                 <group string="Commission lines" colspan="4">
                     <field name="line_ids" nolabel="1">
                         <tree string="Settlement lines">
-                            <field name="date" />
-                            <field name="invoice_line_id" />
-                            <field name="commission_id" />
-                            <field name="settled_amount" />
+                            <field name="date"/>
+                            <field name="invoice_line_id"/>
+                            <field name="commission_id"/>
+                            <field name="settled_amount"/>
                         </tree>
                     </field>
                 </group>
                 <group class="oe_subtotal_footer oe_right">
                     <field
-                        name="total"
-                        class="oe_subtotal_footer_separator"
-                        widget="monetary"
-                        options="{'currency_field': 'currency_id'}"
+                            name="total"
+                            class="oe_subtotal_footer_separator"
+                            widget="monetary"
+                            options="{'currency_field': 'currency_id'}"
                     />
                 </group>
             </form>
@@ -112,11 +107,11 @@
         <field name="model">sale.commission.settlement.line</field>
         <field name="arch" type="xml">
             <tree string="Settlement lines" create="false">
-                <field name="date" />
-                <field name="agent_id" />
-                <field name="invoice_line_id" />
-                <field name="commission_id" />
-                <field name="settled_amount" sum="Settled total" />
+                <field name="date"/>
+                <field name="agent_id"/>
+                <field name="invoice_line_id"/>
+                <field name="commission_id"/>
+                <field name="settled_amount" sum="Settled total"/>
             </tree>
         </field>
     </record>
@@ -125,25 +120,25 @@
         <field name="model">sale.commission.settlement.line</field>
         <field name="arch" type="xml">
             <search string="Settlement lines search">
-                <field name="agent_id" />
-                <field name="date" />
-                <field name="commission_id" />
+                <field name="agent_id"/>
+                <field name="date"/>
+                <field name="commission_id"/>
                 <filter
-                    string="This year"
-                    name="thisyear"
-                    domain="['|', ('date', '=', False), '&amp;',('date','&lt;=', time.strftime('%%Y-12-31')),('date','&gt;=',time.strftime('%%Y-01-01'))]"
+                        string="This year"
+                        name="thisyear"
+                        domain="['|', ('date', '=', False), '&amp;',('date','&lt;=', time.strftime('%%Y-12-31')),('date','&gt;=',time.strftime('%%Y-01-01'))]"
                 />
-                <separator />
+                <separator/>
                 <group expand="1" string="Group By">
                     <filter
-                        string="Agent"
-                        name="group_agent"
-                        context="{'group_by': 'agent_id'}"
+                            string="Agent"
+                            name="group_agent"
+                            context="{'group_by': 'agent_id'}"
                     />
                     <filter
-                        string="Date month"
-                        name="group_date"
-                        context="{'group_by': 'date:month'}"
+                            string="Date month"
+                            name="group_date"
+                            context="{'group_by': 'date:month'}"
                     />
                 </group>
             </search>
@@ -154,9 +149,9 @@
         <field name="model">sale.commission.settlement.line</field>
         <field name="arch" type="xml">
             <graph string="Settlement analysis" type="pivot">
-                <field name="agent_id" type="row" />
-                <field name="date" interval="month" type="col" />
-                <field name="settled_amount" type="measure" />
+                <field name="agent_id" type="row"/>
+                <field name="date" interval="month" type="col"/>
+                <field name="settled_amount" type="measure"/>
             </graph>
         </field>
     </record>
@@ -167,9 +162,9 @@
         <field name="binding_view_types">form,tree</field>
     </record>
     <menuitem
-        name="Settlements"
-        id="menu_settle_commissions"
-        parent="menu_sale_commissions_management"
-        action="action_settle_commission"
+            name="Settlements"
+            id="menu_settle_commissions"
+            parent="menu_sale_commissions_management"
+            action="action_settle_commission"
     />
 </odoo>

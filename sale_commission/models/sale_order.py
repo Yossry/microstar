@@ -12,21 +12,14 @@ class SaleOrder(models.Model):
         for record in self:
             record.commission_total = sum(record.mapped("order_line.agent_ids.amount"))
 
-    commission_total = fields.Float(
-        string="Commissions",
-        compute="_compute_commission_total",
-        store=True,
-    )
+    commission_total = fields.Float(string="Commissions", compute="_compute_commission_total", store=True)
 
     def recompute_lines_agents(self):
         self.mapped("order_line").recompute_agents()
 
 
 class SaleOrderLine(models.Model):
-    _inherit = [
-        "sale.order.line",
-        "sale.commission.mixin",
-    ]
+    _inherit = ["sale.order.line", "sale.commission.mixin", ]
     _name = "sale.order.line"
 
     agent_ids = fields.One2many(comodel_name="sale.order.line.agent")
@@ -36,9 +29,7 @@ class SaleOrderLine(models.Model):
         self.agent_ids = False  # for resetting previous agents
         for record in self.filtered(lambda x: x.order_id.partner_id):
             if not record.commission_free:
-                record.agent_ids = record._prepare_agents_vals_partner(
-                    record.order_id.partner_id
-                )
+                record.agent_ids = record._prepare_agents_vals_partner(record.order_id.partner_id)
 
     def _prepare_invoice_line(self, **optional_values):
         vals = super()._prepare_invoice_line(**optional_values)
@@ -50,12 +41,16 @@ class SaleOrderLine(models.Model):
 
 
 class SaleOrderLineAgent(models.Model):
-    _inherit = "sale.commission.line.mixin"
+    _inherit = ["sale.commission.line.mixin", "mail.thread", "mail.activity.mixin"]
     _name = "sale.order.line.agent"
     _description = "Agent detail of commission line in order lines"
 
+    name = fields.Char('Name')
+    sequence = fields.Integer('Sequence', default=10)
     object_id = fields.Many2one(comodel_name="sale.order.line")
     currency_id = fields.Many2one(related="object_id.currency_id")
+    sale_order = fields.Many2one('sale.order', 'Sale Order')
+    sale_order_line = fields.Many2one('sale.order.line', 'Order Line')
 
     @api.depends(
         "object_id.price_subtotal", "object_id.product_id", "object_id.product_uom_qty"
@@ -63,9 +58,13 @@ class SaleOrderLineAgent(models.Model):
     def _compute_amount(self):
         for line in self:
             order_line = line.object_id
-            line.amount = line._get_commission_amount(
-                line.commission_id,
-                order_line.price_subtotal,
-                order_line.product_id,
-                order_line.product_uom_qty,
-            )
+            line.amount = line._get_commission_amount(line.commission_id, order_line.price_subtotal, order_line.product_id, order_line.product_uom_qty)
+
+    @api.model_create_multi
+    def create(self, vals_list):
+        results = super(SaleOrderLineAgent, self).create(vals_list)
+        if results:
+            for result in results:
+                if not result.name:
+                    result.name = self.env['ir.sequence'].next_by_code('sale.order.line.agent')
+        return result
