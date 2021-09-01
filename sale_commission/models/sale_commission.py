@@ -5,7 +5,7 @@ from odoo import _, api, exceptions, fields, models
 class SaleCommission(models.Model):
     _name = "sale.commission"
     _inherit = ['mail.thread', 'mail.activity.mixin']
-    _description = "Commission in sales"
+    _description = "Sales Commission Types "
 
     name = fields.Char("Name", required=True, tracking=True)
     sequence = fields.Integer('Sequence', default=10)
@@ -45,7 +45,7 @@ class SaleCommission(models.Model):
 
 class SaleCommissionSection(models.Model):
     _name = "sale.commission.section"
-    _description = "Commission section"
+    _description = "Commission Section"
 
     commission_id = fields.Many2one("sale.commission", string="Commission")
     amount_from = fields.Float(string="From")
@@ -56,8 +56,4 @@ class SaleCommissionSection(models.Model):
     def _check_amounts(self):
         for section in self:
             if section.amount_to < section.amount_from:
-                raise exceptions.ValidationError(
-                    _("The lower limit cannot be greater than upper one.")
-                )
-
-
+                raise exceptions.ValidationError(_("The lower limit cannot be greater than upper one."))
