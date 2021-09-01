@@ -8,7 +8,7 @@
                         <div style="background-color: #008B8B; color:#fff !important; font:25px lucida-console,sans-serif !important;font-weight: bold;">
                             <strong>
                                 <div style="border: 1px solid black;">
-                                    <center> Partner Ledger </center>
+                                    <center>Partner Ledger</center>
                                 </div>
                             </strong>
                         </div>
@@ -17,8 +17,9 @@
                                 <strong>Partner's Account :</strong>
                                 <t t-if="extra['account_type'] == 'customer'">Receivable Accounts</t>
                                 <t t-if="extra['account_type'] == 'supplier'">Payable Accounts</t>
-                                <t t-if="extra['account_type'] == 'customer_supplier'">Receivable and Payable Accounts</t>
-                                <br />
+                                <t t-if="extra['account_type'] == 'customer_supplier'">Receivable and Payable Accounts
+                                </t>
+                                <br/>
                                 <t t-if="extra['date_from']">
                                     <strong>Start Date :</strong>
                                     <span t-esc="extra['date_from']"/>
@@ -28,14 +29,14 @@
                                 <strong>Target Moves :</strong>
                                 <t t-if="extra['target_move'] == 'all'">All Entries</t>
                                 <t t-if="extra['target_move'] == 'posted'">All Posted Entries</t>
-                                <br />
+                                <br/>
                                 <t t-if="extra['date_to']">
                                     <strong>End Date :</strong>
                                     <span t-esc="extra['date_to']"/>
                                 </t>
                             </div>
                         </div>
-                        
+
                         <table class="table table-condensed">
                             <thead>
                                 <tr>
@@ -61,20 +62,20 @@
                                     <td class="text-right">
                                         <span t-if="sum_partner(data, o, extra['currency_ids'])">
                                             <strong t-esc="sum_partner(data, o, extra['currency_ids'])[0]['total_debit']"
-                                                t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/>
+                                                    t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/>
                                         </span>
                                     </td>
                                     <td class="text-right">
                                         <span t-if="sum_partner(data, o, extra['currency_ids'])">
                                             <strong t-esc="sum_partner(data, o, extra['currency_ids'])[0]['total_credit']"
-                                                t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/>
+                                                    t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/>
                                         </span>
                                     </td>
                                     <t t-if="extra['reconciled'] == True">
                                         <td class="text-right">
                                             <span t-if="sum_partner(data, o, extra['currency_ids'])">
                                                 <strong t-esc="sum_partner(data, o, extra['currency_ids'])[0]['total_balance']"
-                                                    t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/>
+                                                        t-options="{'widget': 'monetary', 'display_currency': res_company.currency_id}"/>
                                             </span>
                                         </td>
                                     </t>
@@ -97,6 +98,14 @@
                                         </td>
                                         <td>
                                             <span t-esc="line['displayed_name']"/>
+                                            <br/>
+                                            <t t-foreach="line['lines_id']" t-as="line_id">
+                                                <span t-esc="line_id.name"/>
+                                                ( <span t-esc="line_id.quantity"/> <span t-esc="line_id.product_uom_id.name"/>)
+                                               / <span t-esc="line['currency_id']"/> <span t-esc="line_id.price_unit"/> per <span t-esc="line_id.product_uom_id.name"/> /
+                                                Total <span t-esc="line['currency_id']"/> <span t-esc="line_id.price_subtotal"/>
+                                                <br/>
+                                            </t>
                                         </td>
                                         <td>
                                             <span t-esc="line['date_due']"/>

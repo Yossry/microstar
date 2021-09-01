@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import pdb
 
 from odoo import api, models, fields
 
@@ -34,6 +35,7 @@ class MultiReportPartnerLedger(models.AbstractModel):
         full_account = []
         for invoice in invoice_ids:
             displayed_name = str(invoice.move_id.name or '') + '-' + str(invoice.move_id.payment_reference or '')
+            # pdb.set_trace()
             vals = {
                 'debit' : invoice.debit,
                 'credit' : invoice.credit,
@@ -42,7 +44,9 @@ class MultiReportPartnerLedger(models.AbstractModel):
                 'date': invoice.move_id.invoice_date,
                 'date_due': invoice.move_id.invoice_date_due,
                 'code' : invoice.journal_id.code,
+                'lines_id': invoice.move_id.invoice_line_ids,
                 'a_code' : invoice.account_id.code,
+
                 'displayed_name': displayed_name,
                 'currency_id': invoice.currency_id.symbol,
                 'invoice_id': invoice.move_id.id
