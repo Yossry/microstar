@@ -127,7 +127,8 @@ class AccountMoveLine(models.Model):
         if currency and currency!=company.currency_id:
             # Multi-currencies.
             if self.move_id.apply_manual_currency_exchange:
-                balance = price_subtotal / self.move_id.manual_currency_exchange_rate
+                # balance = price_subtotal / self.move_id.manual_currency_exchange_rate
+                balance = price_subtotal * self.move_id.manual_currency_exchange_rate
             else:
                 balance = currency._convert(price_subtotal, company.currency_id, company, date)
             return {
