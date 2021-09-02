@@ -13,6 +13,12 @@
                     <field name="manual_currency_exchange_rate"
                            attrs="{'invisible': ['|',('apply_manual_currency_exchange', '=', False),('active_manual_currency_rate', '=', False)],'required':[('apply_manual_currency_exchange', '=', True)]}"/>
                 </field>
+
+                <field name="partner_bank_id" position="after">
+                    <field name="source_amount"/>
+                    <field name="source_currency_id"/>
+                    <field name="source_amount_currency"/>
+                </field>
             </field>
         </record>
 
