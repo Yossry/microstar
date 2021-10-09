@@ -35,8 +35,6 @@
         'reports/police_verification_report.xml',
         'reports/salary_report_view.xml',
         'reports/report_view.xml',
-
-
     ],
     'demo': [
     ],
