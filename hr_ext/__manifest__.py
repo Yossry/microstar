@@ -36,6 +36,7 @@
         'reports/salary_report_view.xml',
         'reports/report_view.xml',
 
+
     ],
     'demo': [
     ],
