@@ -37,7 +37,6 @@
         'reports/report_view.xml',
     ],
 
-
     'demo': [
     ],
     'test': [
