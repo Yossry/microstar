@@ -19,7 +19,7 @@
                 id="hr_attendance.menu_hr_attendance_report"
                 name="Reports"
                 parent="hr_attendance.menu_hr_attendance_root"
-                groups="account.group_account_manager,hr_payroll.group_hr_payroll_manager"
+                groups="account.group_account_manager"
                 sequence="75"/>
 
         <menuitem
