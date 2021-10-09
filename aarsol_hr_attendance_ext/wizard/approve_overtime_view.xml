@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <record id="view_overtime_approve" model="ir.ui.view">
+            <field name="name">hr.overtime.approve.view</field>
+            <field name="model">hr.overtime.approve</field>
+            <field name="arch" type="xml">
+                <form string="Overtime to Approve">
+                    <group colspan="4" string="Overtimes">
+                        <field name="overtime_ids" nolabel="1"/>
+                    </group>
+                    <newline/>
+                    <footer>
+                        <button name="action_approve_overtime" type="object" string="Approve Overtimes" class="oe_highlight"/>
+                        <button special="cancel" string="Close"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_overtimes_to_approve" model="ir.actions.act_window">
+            <field name="name">Approve Overtimes</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">hr.overtime.approve</field>
+            <field name="view_mode">form</field>
+            <field name="groups_id" eval="[(4,ref('hr_attendance.group_hr_attendance_user'))]"/>
+            <field name="target">new</field>
+        </record>
+
+<!--        <record id="overtimes_to_approve_multi" model="ir.actions.act_window">-->
+        <!--            <field name="name">Approve Overtimes</field>-->
+        <!--            <field name="res_model">hr.overtime.approve</field>-->
+        <!--            <field name="view_mode">tree,form</field>-->
+        <!--            <field name="view_id" ref="view_overtime_approve"/>-->
+        <!--            <field name="target">new</field>-->
+        <!--            <field name="binding_model_id" ref="aarsol_hr_attendance.model_hr_employee_overtime"/>-->
+        <!--            <field name="binding_view_types">form</field>-->
+        <!--        </record>-->
+
+    </data>
+</odoo>

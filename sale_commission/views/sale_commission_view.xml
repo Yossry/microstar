@@ -4,10 +4,14 @@
         <field name="name">Sales commissions tree</field>
         <field name="model">sale.commission</field>
         <field name="arch" type="xml">
-            <tree string="Commissions">
-                <field name="name" />
-                <field name="commission_type" />
-                <field name="amount_base_type" />
+            <tree string="Commissions" decoration-info="state=='draft'" decoration-success="state=='lock'">
+                <field name="sequence" widget="handle"/>
+                <field name="name"/>
+                <field name="commission_type"/>
+                <field name="amount_base_type"/>
+                <field name="invoice_state"/>
+                <field name="create_uid" string="Created By" optional="show" widget="many2one_avatar_user"/>
+                <field name="state" widget="badge" decoration-info="state=='draft'" decoration-success="state=='lock'"/>
             </tree>
         </field>
     </record>
@@ -15,59 +19,87 @@
         <field name="name">Sales commissions form</field>
         <field name="model">sale.commission</field>
         <field name="arch" type="xml">
-            <form string="Commission">
-                <group string="General information">
-                    <group>
-                        <field name="name" />
-                        <field name="active" />
+            <form string="Commission Types">
+                <header>
+                    <button name="action_lock" type="object" class="oe_highlight" string="Lock" states="draft" groups="hr.group_hr_user"/>
+                    <button name="action_unlock" type="object" class="oe_highlight" string="UnLock" states="lock" groups="hr.group_hr_user"/>
+                    <field name="state" widget="statusbar"/>
+                </header>
+                <sheet>
+                    <group string="General information">
+                        <group>
+                            <field name="name" attrs="{'readonly':[('state','!=','draft')]}"/>
+                            <field name="active" attrs="{'readonly':[('state','!=','draft')]}"/>
+                        </group>
+                        <group>
+                            <field name="commission_type" attrs="{'readonly':[('state','!=','draft')]}"/>
+                            <field name="amount_base_type" attrs="{'readonly':[('state','!=','draft')]}"/>
+                            <field name="invoice_state" attrs="{'readonly':[('state','!=','draft')]}"/>
+                        </group>
                     </group>
-                    <group>
-                        <field name="commission_type" />
-                        <field name="amount_base_type" />
-                        <field name="invoice_state" />
+                    <group string="Rates definition" colspan="4">
+                        <group colspan="2">
+                            <field name="fix_qty"
+                                   attrs="{'invisible': [('commission_type', 'not in', ('fixed','fixed_amount'))],
+                                   'required': [('commission_type', 'in', ('fixed','fixed_amount'))],
+                                   'readonly':[('state','!=','draft')]}"
+                            />
+                        </group>
+                        <field name="section_ids" widget="one2many_list" colspan="4" nolabel="1" attrs="{'invisible': [('commission_type', '!=', 'section')],'readonly':[('state','!=','draft')]}">
+                            <tree string="Sections" editable="bottom">
+                                <field name="amount_from"/>
+                                <field name="amount_to"/>
+                                <field name="percent"/>
+                            </tree>
+                        </field>
                     </group>
-                </group>
-                <group string="Rates definition" colspan="4">
-                    <group colspan="2">
-                        <field
-                            name="fix_qty"
-                            attrs="{'invisible': [('commission_type', '!=', 'fixed')], 'required': [('commission_type', '=', 'fixed')]}"
-                        />
-                    </group>
-                    <field
-                        name="section_ids"
-                        widget="one2many_list"
-                        colspan="4"
-                        nolabel="1"
-                        attrs="{'invisible': [('commission_type', '!=', 'section')]}"
-                    >
-                        <tree string="Sections" editable="bottom">
-                            <field name="amount_from" />
-                            <field name="amount_to" />
-                            <field name="percent" />
-                        </tree>
-                    </field>
-                </group>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers" groups="base.group_user"/>
+                    <field name="activity_ids" widget="mail_activity"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
             </form>
         </field>
     </record>
+
+    <record id="sale_commission_search" model="ir.ui.view">
+        <field name="name">sales.commission.search</field>
+        <field name="model">sale.commission</field>
+        <field name="arch" type="xml">
+            <search string="Commission Type">
+                <field name="name"/>
+                <field name="commission_type"/>
+                <field name="invoice_state"/>
+                <field name="amount_base_type"/>
+                <field name="state"/>
+                <group expand="0" string="Group By">
+                    <filter name="status" string="Status" domain="[]" context="{'group_by':'state'}"/>
+                    <filter name="group_by_type" string="Type" domain="[]" context="{'group_by':'commission_type'}"/>
+                    <filter name="group_by_amount_base_type" string="Amount Base Type" domain="[]" context="{'group_by':'amount_base_type'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+
     <record model="ir.actions.act_window" id="action_commission">
-        <field name="name">Commission types</field>
+        <field name="name">Commission Types</field>
         <field name="type">ir.actions.act_window</field>
         <field name="res_model">sale.commission</field>
         <field name="binding_view_types">form,tree</field>
     </record>
     <menuitem
-        name="Commissions Management"
-        id="menu_sale_commissions_management"
-        parent="sale.sale_menu_root"
-        groups="sales_team.group_sale_manager"
-        sequence="4"
+            name="Commissions Management"
+            id="menu_sale_commissions_management"
+            parent="sale.sale_menu_root"
+            groups="sales_team.group_sale_manager"
+            sequence="4"
     />
     <menuitem
-        name="Commission types"
-        id="menu_sale_commissions_types"
-        parent="menu_sale_commissions_management"
-        action="action_commission"
+            name="Commission types"
+            id="menu_sale_commissions_types"
+            parent="menu_sale_commissions_management"
+            action="action_commission"
     />
 </odoo>

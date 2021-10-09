@@ -2,17 +2,19 @@
 # Copyright 2020 Tecnativa - Manuel Calero
 {
     "name": "Sales commissions",
-    "version": "13.0.1.4.1",
+    "version": "14.0.1.1.3",
     "author": "Tecnativa," "Odoo Community Association (OCA)",
     "category": "Sales Management",
     "license": "AGPL-3",
-    "depends": ["account", "product", "sale_management"],
+    "depends": ["account", "product", "sale_management", "hr_ext"],
     "website": "https://github.com/OCA/commission",
     "development_status": "Mature",
     "maintainers": ["pedrobaeza"],
     "data": [
         "security/ir.model.access.csv",
         "security/sale_commission_security.xml",
+        "views/data.xml",
+
         "views/sale_commission_view.xml",
         "views/sale_commission_mixin_views.xml",
         "views/product_template_view.xml",
@@ -21,10 +23,14 @@
         "views/account_move_views.xml",
         "views/sale_commission_settlement_view.xml",
         "views/sale_commission_settlement_report.xml",
+
         "views/report_settlement_templates.xml",
         "report/sale_commission_analysis_report_view.xml",
+
+
         "wizard/wizard_settle.xml",
         "wizard/wizard_invoice.xml",
+        "wizard/sale_commission_salary_input.xml",
     ],
     "demo": ["demo/sale_agent_demo.xml"],
     "installable": True,

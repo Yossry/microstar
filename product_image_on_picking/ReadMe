@@ -1,0 +1,3 @@
+14.0.0.1 ==>fixed isue of deliveryslip report when lot serial number are printed in report.
+
+14.0.0.2 : 26-05-2021 : Fix Issue for image field show too big.

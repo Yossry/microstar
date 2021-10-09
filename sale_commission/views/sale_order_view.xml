@@ -3,54 +3,113 @@
     <record id="view_order_agent_form_inherit" model="ir.ui.view">
         <field name="name">sale.agent.order.inherit.form</field>
         <field name="model">sale.order</field>
-        <field name="inherit_id" ref="sale.view_order_form" />
+        <field name="inherit_id" ref="sale.view_order_form"/>
         <field name="arch" type="xml">
-            <xpath
-                expr="//field[@name='order_line']/tree//field[@name='price_subtotal']"
-                position="after"
-            >
-                <field name="commission_free" invisible="1" />
-                <field name="invoice_lines" invisible="1" />
+            <xpath expr="//field[@name='order_line']/tree//field[@name='price_subtotal']" position="after">
+                <field name="commission_free" invisible="1"/>
+                <field name="invoice_lines" invisible="1"/>
                 <button
-                    name="button_edit_agents"
-                    icon="fa-users"
-                    attrs="{'invisible': ['|', ('commission_free', '=', True), ('invoice_lines', '!=', [])]}"
-                    type="object"
+                        name="button_edit_agents"
+                        icon="fa-users"
+                        attrs="{'invisible': ['|', ('commission_free', '=', True), ('invoice_lines', '!=', [])]}"
+                        type="object"
                 />
-                <field name="commission_status" optional="show" />
+                <field name="commission_status" optional="show"/>
             </xpath>
             <field name="amount_total" position="after">
                 <field
-                    name="commission_total"
-                    widget="monetary"
-                    options="{'currency_field': 'currency_id'}"
+                        name="commission_total"
+                        widget="monetary"
+                        options="{'currency_field': 'currency_id'}"
                 />
             </field>
             <xpath expr="//field[@name='note']" position="after">
                 <group name="group_recompute_commission">
                     <button
-                        name="recompute_lines_agents"
-                        type="object"
-                        string="Regenerate agents"
-                        states="draft,sent"
+                            name="recompute_lines_agents"
+                            type="object"
+                            string="Regenerate agents"
+                            states="draft,sent"
                     />
                 </group>
             </xpath>
         </field>
     </record>
+
     <!-- This view is needed for proper visualization of the popup / embedded one2many -->
     <record model="ir.ui.view" id="view_sale_order_line_tree">
         <field name="name">sale.order.line.agent.tree</field>
         <field name="model">sale.order.line.agent</field>
         <field name="arch" type="xml">
             <tree string="Agents" editable="bottom">
-                <field
-                    name="agent_id"
-                    context="{'default_agent': True, 'default_customer': False, 'default_supplier': True}"
-                />
-                <field name="commission_id" />
-                <field name="amount" />
+                <field name="agent_id" context="{'default_agent': True, 'default_customer': False, 'default_supplier': True}"/>
+                <field name="commission_id"/>
+                <field name="amount"/>
             </tree>
         </field>
     </record>
+
+    <record model="ir.ui.view" id="view_sale_order_line_tree100">
+        <field name="name">sale.order.line.agent.tree100</field>
+        <field name="model">sale.order.line.agent</field>
+        <field name="arch" type="xml">
+            <tree string="Agents" create="false" delete="false" duplicate="false">
+                <field name="sequence" widget="handle"/>
+                <field name="name"/>
+                <field name="agent_id" context="{'default_agent': True, 'default_customer': False, 'default_supplier': True}"/>
+                <field name="commission_id" string="Type"/>
+                <field name="amount" string="Amount"/>
+                <field name="sale_order"/>
+                <field name="sale_order_line"/>
+                <field name="create_date" widget="date"/>
+                <field name="create_uid" string="Created By"/>
+            </tree>
+        </field>
+    </record>
+
+    <record model="ir.ui.view" id="view_sale_order_line_form">
+        <field name="name">sale.order.line.agent.form.view</field>
+        <field name="model">sale.order.line.agent</field>
+        <field name="arch" type="xml">
+            <form string="Agents" create="false" delete="false" duplicate="false">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="agent_id" readonly="1" context="{'default_agent': True, 'default_customer': False, 'default_supplier': True}"/>
+                            <field name="commission_id" string="Type" readonly="1"/>
+                            <field name="amount" string="Amount" readonly="1"/>
+                            <field name="create_date" widget="date" readonly="1"/>
+                        </group>
+                        <group>
+                            <field name="sale_order" readonly="1"/>
+                            <field name="sale_order_line" readonly="1"/>
+                            <field name="create_uid" string="Created By" readonly="1"/>
+                        </group>
+                    </group>
+                </sheet>
+                <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers" groups="base.group_user"/>
+                    <field name="activity_ids" widget="mail_activity"/>
+                    <field name="message_ids" widget="mail_thread"/>
+                </div>
+            </form>
+        </field>
+    </record>
+
+    <record model="ir.actions.act_window" id="action_sale_order_line_comm">
+        <field name="name">Agent Commission Detail</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">sale.order.line.agent</field>
+        <field name="view_id" ref="view_sale_order_line_tree100"/>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem
+            name="Agents Commissions Detail"
+            id="menu_sale_order_line_agent_comm"
+            parent="menu_sale_commissions_management"
+            groups="sales_team.group_sale_manager"
+            action="action_sale_order_line_comm"
+            sequence="100"
+    />
 </odoo>

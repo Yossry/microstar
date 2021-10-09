@@ -25,14 +25,16 @@ class ResPartner(models.Model):
         help="Check this field if the partner is a creditor or an agent.",
     )
     agent_type = fields.Selection(
-        selection=[("agent", "External agent")], string="Type", default="agent",
+        selection=[("agent", "External agent")],
+        string="Type",
+        default="agent",
     )
     commission_id = fields.Many2one(
         string="Commission",
         comodel_name="sale.commission",
         help="This is the default commission used in the sales where this "
-        "agent is assigned. It can be changed on each operation if "
-        "needed.",
+             "agent is assigned. It can be changed on each operation if "
+             "needed.",
     )
     settlement = fields.Selection(
         selection=[
@@ -56,3 +58,9 @@ class ResPartner(models.Model):
         res = super()._commercial_fields()
         res.append("agent_ids")
         return res
+
+
+class HREmployee(models.Model):
+    _inherit = "hr.employee"
+
+    agent_id = fields.Many2one('res.partner', 'Agent')

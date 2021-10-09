@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <data>
+
+        <!--  Employee Status -->
+         <record id="view_hr_employee_status_form" model="ir.ui.view">
+            <field name="name">hr.employee.status.form.view</field>
+            <field name="model">hr.employee.status</field>
+            <field name="arch" type="xml">
+                <form string="Employee Status">
+                    <sheet>
+                        <group>
+                            <group>
+                                <field name="name" required="1"/>
+                                <field name="code"/>
+                            </group>
+                            <group>
+                            </group>
+                        </group>
+                    </sheet>
+                    <div class="oe_chatter">
+                         <field name="message_follower_ids" widget="mail_followers" groups="base.group_user"/>
+                         <field name="activity_ids" widget="mail_activity"/>
+                         <field name="message_ids" widget="mail_thread"/>
+                    </div>
+                </form>
+            </field>
+         </record>
+
+         <record id="view_hr_employee_status_tree" model="ir.ui.view">
+            <field name="name">hr.employee.status.tree.view</field>
+            <field name="model">hr.employee.status</field>
+            <field name="arch" type="xml">
+                <tree string="Employee Status" decoration-success="active == True">
+                    <field name="name"/>
+                    <field name="code"/>
+                    <field name="active"/>
+                </tree>
+            </field>
+         </record>
+
+        <record model="ir.ui.view" id="view_hr_employee_status_search">
+            <field name="name">hr.employee.status.search</field>
+            <field name="model">hr.employee.status</field>
+            <field name="arch" type="xml">
+                <search string="Employee Status">
+                    <field name="name"/>
+                    <field name="code"/>
+                </search>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="action_hr_employee_status">
+            <field name="name">Employee Status</field>
+            <field name="res_model">hr.employee.status</field>
+            <field name="view_mode">tree,form</field>
+            <field name="domain">[]</field>
+            <field name="context">{}</field>
+        </record>
+
+        <menuitem
+                action="action_hr_employee_status"
+               id="menu_hr_employee_status"
+               name="Employee Status"
+               parent="hr.menu_human_resources_configuration"
+               sequence="200"/>
+    </data>
+</odoo>

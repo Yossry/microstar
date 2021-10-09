@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<odoo>
+    <record id="sale_commission_salary_input_form" model="ir.ui.view">
+        <field name="name">Sale Commission Salary Input</field>
+        <field name="model">sale.commission.salary.input</field>
+        <field name="arch" type="xml">
+            <form string="">
+                <group>
+                    <field name="settlement_id" invisible="1"/>
+                    <field name="date"/>
+                </group>
+                <group>
+
+                </group>
+                <footer>
+                    <button name="action_create_salary_inputs" string="Create Commission Input" type="object" class="oe_highlight"/>
+                    or
+                    <button special="cancel" string="_Cancel" class="oe_link"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+    <record id="action_commission_salary_salary_input" model="ir.actions.act_window">
+        <field name="name">Commission Salary Inputs</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">sale.commission.salary.input</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+        <field name="binding_model_id" ref="model_sale_commission_settlement"/>
+        <field name="binding_view_types">form,list</field>
+    </record>
+
+</odoo>

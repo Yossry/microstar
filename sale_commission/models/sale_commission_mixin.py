@@ -6,9 +6,7 @@ from odoo import _, api, fields, models
 
 class SaleCommissionMixin(models.AbstractModel):
     _name = "sale.commission.mixin"
-    _description = (
-        "Mixin model for applying to any object that wants to handle commissions"
-    )
+    _description = "Mixin model for applying to any object that wants to handle commissions"
 
     agent_ids = fields.One2many(
         comodel_name="sale.commission.line.mixin",
@@ -27,9 +25,7 @@ class SaleCommissionMixin(models.AbstractModel):
         store=True,
         readonly=True,
     )
-    commission_status = fields.Char(
-        compute="_compute_commission_status", string="Commission",
-    )
+    commission_status = fields.Char(compute="_compute_commission_status", string="Commission", )
 
     def _prepare_agent_vals(self, agent):
         return {"agent_id": agent.id, "commission_id": agent.commission_id.id}
@@ -48,14 +44,12 @@ class SaleCommissionMixin(models.AbstractModel):
         for line in self:
             if line.commission_free:
                 line.commission_status = _("Comm. free")
-            elif len(line.agent_ids) == 0:
+            elif len(line.agent_ids)==0:
                 line.commission_status = _("No commission agents")
-            elif len(line.agent_ids) == 1:
+            elif len(line.agent_ids)==1:
                 line.commission_status = _("1 commission agent")
             else:
-                line.commission_status = _("%s commission agents") % (
-                    len(line.agent_ids),
-                )
+                line.commission_status = _("%s commission agents") % (len(line.agent_ids),)
 
     def recompute_agents(self):
         self._compute_agent_ids()
@@ -116,7 +110,9 @@ class SaleCommissionLineMixin(models.AbstractModel):
         copy=True,
     )
     amount = fields.Monetary(
-        string="Commission Amount", compute="_compute_amount", store=True,
+        string="Commission Amount",
+        # compute="_compute_amount",
+        # store=True,
     )
     # Fields to be overriden with proper source (via related or computed field)
     currency_id = fields.Many2one(comodel_name="res.currency")
@@ -134,14 +130,16 @@ class SaleCommissionLineMixin(models.AbstractModel):
         self.ensure_one()
         if product.commission_free or not commission:
             return 0.0
-        if commission.amount_base_type == "net_amount":
+        if commission.amount_base_type=="net_amount":
             # If subtotal (sale_price * quantity) is less than
             # standard_price * quantity, it means that we are selling at
             # lower price than we bought, so set amount_base to 0
             subtotal = max([0, subtotal - product.standard_price * quantity])
-        if commission.commission_type == "fixed":
+        if commission.commission_type=="fixed":
             return subtotal * (commission.fix_qty / 100.0)
-        elif commission.commission_type == "section":
+        if commission.commission_type=="fixed_amount":
+            return commission.fix_qty
+        elif commission.commission_type=="section":
             return commission.calculate_section(subtotal)
 
     @api.depends("agent_id")

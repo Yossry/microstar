@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!--***** HR Employee Form View *****-->
+    <record id="view_employee_inherited_form" model="ir.ui.view">
+        <field name="name">hr.employee.inherited.form.view</field>
+        <field name="model">hr.employee</field>
+        <field name="inherit_id" ref="hr.view_employee_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//header" position="inside">
+                <button name="action_lock" string="Lock Profile" attrs="{'invisible':[('profile_status','!=', 'draft')]}" type="object" groups="hr.group_hr_manager"/>
+                <button name="action_unlock" string="UnLock Profile" attrs="{'invisible':[('profile_status','=', 'draft')]}" type="objectl" groups="hr.group_hr_manager"/>
+                <field name="status" widget="statusbar"/>
+            </xpath>
+
+            <field name="mobile_phone" position="before">
+                <field name="code" required="1"/>
+                <field name="father_name" required="1"/>
+                <field name="cnic" required="1"/>
+                <field name="birthday" required="1"/>
+                <field name="age"/>
+                <field name="profile_status" invisible="1"/>
+            </field>
+            <div name="div_km_home_work" position="after">
+                <field name="employee_address"/>
+            </div>
+
+            <xpath expr="//page[@name='personal_information']/group/group[2]/field[@name='birthday']" position="attributes">
+                <attribute name="invisible">True</attribute>
+            </xpath>
+            <field name="identification_id" position="attributes">
+                <attribute name="invisible">True</attribute>
+            </field>
+            <field name="coach_id" position="attributes">
+                <attribute name="invisible">True</attribute>
+            </field>
+            <field name="coach_id" position="after">
+                <field name="joining_date"/>
+                <field name="biometric_code"/>
+                <field name="location_id" options="{'no_create':True}"/>
+            </field>
+
+
+            <xpath expr="//notebook/page[@name='hr_settings']//group[@name='active_group']/field[@name='job_id']" position="attributes">
+                <attribute name="invisible">True</attribute>
+            </xpath>
+            <xpath expr="//notebook/page[@name='hr_settings']//group[@name='active_group']/field[@name='job_id']" position="after">
+                <field name="bank_account_title"/>
+                <field name="bank_account_no"/>
+                <field name="bank_id" options="{'no_quick_create':True,'no_create_edit':True,'no_create':True}"/>
+            </xpath>
+
+            <field name="department_id" position="after">
+                <field name="job_id" required="1" domain="[('department_id', '=', department_id)]"
+                       options="{'no_quick_create':True,'no_create_edit':True,'no_create':True}"/>
+            </field>
+
+            <field name="department_id" position="attributes">
+                <attribute name="options">{'no_quick_create':True,'no_create_edit':True,'no_create':True}</attribute>
+                <attribute name="required">True</attribute>
+            </field>
+            <field name="parent_id" position="attributes">
+                <attribute name="options">{'no_quick_create':True,'no_create_edit':True,'no_create':True}</attribute>
+            </field>
+
+            <xpath expr="//notebook/page[@name='hr_settings']//group[@name='active_group']/field[@name='user_id']" position="attributes">
+                <attribute name="options">{'no_quick_create':True,'no_create_edit':True,'no_create':True}</attribute>
+            </xpath>
+        </field>
+    </record>
+
+    <!--***** HR Employee Tree View *****-->
+    <record id="view_employee_inherited_tree" model="ir.ui.view">
+        <field name="name">hr.employee.inherited.tree.view</field>
+        <field name="model">hr.employee</field>
+        <field name="inherit_id" ref="hr.view_employee_tree"/>
+        <field name="arch" type="xml">
+            <field name="name" position="before">
+                <field name="code"/>
+            </field>
+            <field name="name" position="after">
+                <field name="father_name"/>
+                <field name="cnic"/>
+            </field>
+            <field name="parent_id" position="after">
+                <field name="status" string="Status"/>
+                <field name="biometric_code" optional="show"/>
+                <field name="location_id"/>
+            </field>
+
+            <field name="work_email" position="attributes">
+                <attribute name="invisible">True</attribute>
+            </field>
+        </field>
+    </record>
+
+    <record id="hr_employee_search_inherited_view" model="ir.ui.view">
+        <field name="name">hr.employee.inherited.search.view</field>
+        <field name="model">hr.employee</field>
+        <field name="inherit_id" ref="hr.view_employee_filter"/>
+        <field name="arch" type="xml">
+            <data>
+                <field name="name" position="after">
+                    <field name="father_name"/>
+                    <field name="code"/>
+                    <field name="biometric_code"/>
+                    <field name="cnic"/>
+                    <field name="mobile_phone"/>
+                    <field name="work_phone"/>
+                    <field name="work_email"/>
+                    <field name="joining_date"/>
+                    <field name="status" string="Status"/>
+                    <field name="location_id"/>
+                </field>
+
+                <xpath expr="//filter[@name='message_needaction']" position="before">
+                    <filter name="joining_date_filter" string="Joining Date" date="joining_date"/>
+                    <separator/>
+                    <filter name="date_of_birth" string="Date of Birth" date="birthday"/>
+                    <separator/>
+                </xpath>
+
+                <xpath expr="//filter[@name='group_job']" position="after">
+                    <separator/>
+                    <filter name="group_status" string="Status" domain="[]" context="{'group_by': 'status'}"/>
+                    <separator/>
+                    <filter name="group_gender" string="Gender" domain="[]" context="{'group_by': 'gender'}"/>
+                    <filter name="group_marital_status" string="Marital Status" domain="[]" context="{'group_by': 'marital'}"/>
+                    <separator/>
+                    <filter name="group_birthday" string="Date of Birth" domain="[]" context="{'group_by': 'birthday'}"/>
+                    <separator/>
+                    <filter name="group_location" string="Location" domain="[]" context="{'group_by': 'location_id'}"/>
+                    <separator/>
+                </xpath>
+
+                <filter name="inactive" position="attributes">
+                    <attribute name="string">In-Active</attribute>
+                </filter>
+            </data>
+        </field>
+    </record>
+
+</odoo>

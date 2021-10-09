@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="multi_currency_partner_ledger_wizard" model="ir.ui.view">
+            <field name="name">Partner Ledger</field>
+            <field name="model">multicurrency.partnerledger</field>
+            <field name="arch" type="xml">
+                <form string="Partner Ledger">
+                    <div class="alert alert-info" role="alert">
+                    Click on <strong> Print </strong> button to print partner ledger report.
+                    </div>
+                    <group>
+                        <field name="partner_ids" widget="many2many_tags" placeholder="Select Partners" required="1"/>
+                    </group>
+                    <group>
+                        <field name="company_id" invisible="1"/>
+                        <group>
+                            <field name="date_from" placeholder="Select Start Date" style="color:#898687"/>
+                            <field name="date_to" placeholder="Select End Date" style="color:#898687"/>
+                            <field name="target_move" widget="radio"/>
+                        </group>
+                        <group>
+                            <field name="currency_ids" widget="many2many_tags" placeholder="Select Currency" style="color:#898687"/>
+                            <field name="result_selection"/>
+                            <field name="reconciled"/>
+                        </group>
+                    </group>
+                    <footer>
+                        <button name="print_partner_ledger" type="object" string="Print" class="btn btn-primary active" icon="fa-file-pdf-o" data-toggle="tooltip" title="Print Partner Ledger"/>
+                        or
+                        <button string="Cancel" class="btn btn-danger disabled" special="cancel" icon="fa-times"/>
+                    </footer>
+
+                </form>
+            
+            </field>
+        </record>
+
+        
+        <record id="multi_currency_partner_ledger_action" model="ir.actions.act_window">
+            <field name="name">Partner Ledger</field>
+            <field name="res_model">multicurrency.partnerledger</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="multi_currency_partner_ledger_wizard"/>
+            <field name="target">new</field>
+        </record>
+
+        <menuitem name="Partner Ledger" action="multi_currency_partner_ledger_action" id="multi_currency_partner_ledger_id" parent="account.account_reports_management_menu" sequence="2"/>
+
+    </data>
+</odoo>

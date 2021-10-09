@@ -10,7 +10,7 @@
     'images': [
     ],
     'depends': [
-        'base', 'mail', 'product', 'purchase'
+        'base', 'mail', 'product', 'purchase', 'sale',
     ],
     'data': [
         'security/security.xml',
@@ -23,6 +23,8 @@
         'views/product_usage_view.xml',
         'views/product_ext_view.xml',
         'views/purchase_ext_view.xml',
+
+        'views/accounts_view.xml',
     ],
     'installable': True,
     'auto_install': False,

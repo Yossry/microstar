@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="view_payslips_cron_wizard" model="ir.ui.view">
+            <field name="name">Payslips Cron Wizard</field>
+            <field name="model">payslips.cron.wizard</field>
+            <field name="arch" type="xml">
+            <form string="Payslips Cron Wizard">
+                <p>This wizard will Generate Cron Entries.</p>
+                <footer>
+                    <button name="generate_cron_entry" string="Generate Slips Cron" type="object" class="oe_highlight"/>
+                    <button string="Cancel" class="oe_link" special="cancel" />
+                </footer>
+                <group>
+                    <group>
+						<field name="date_from" required="1"/>
+						<field name="date_to" required="1"/>
+                    </group>
+                    <group>
+                    </group>
+                </group>
+
+                 <notebook tabpos="up" colspan="4">
+                     <page string="Department Filters" name="departments">
+						<separator string="Generate Only" colspan="4"/>
+						<field name="department_ids"/>
+					</page>
+					<page string="Employee Filters" name="employees">
+						<separator string="Generate Only" colspan="4"/>
+						<field name="employee_ids"/>
+					</page>
+                </notebook>
+            </form>
+            </field>
+        </record>
+
+        <record id="action_payslips_cron_wizard" model="ir.actions.act_window">
+            <field name="name">Create Payslips Cron</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">payslips.cron.wizard</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+
+        <menuitem
+            id="menu_hr_payslip_cron_wizard"
+            name="Generate Payslip Cron"
+            parent="hr_payroll.menu_hr_payroll_employees_root"
+            action="action_payslips_cron_wizard"
+            sequence="60"
+            groups="hr_payroll.group_hr_payroll_user"/>
+
+    </data>
+</odoo>
