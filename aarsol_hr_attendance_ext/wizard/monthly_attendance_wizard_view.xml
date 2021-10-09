@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <record id="view_monthly_attendance_wizard" model="ir.ui.view">
+            <field name="name">monthly.attendance.wizard.view</field>
+            <field name="model">monthly.attendance.wizard</field>
+            <field name="arch" type="xml">
+                <form string="Monthly Attendance Wizard">
+                    <group>
+                        <group>
+                            <field name="date" />
+                        </group>
+                        <group>
+                        	<field name="total_days" />
+                        	<field name="present_days" />
+                        </group>
+                    </group>
+					<footer>
+						<button name="mark_attendance" string="Mark Attendance " type="object" default_focus="1" class="oe_highlight"/>
+						<button string="Cancel" class="oe_link" special="cancel" />
+					</footer> 
+                </form>
+            </field>
+        </record>
+        
+        <record id="act_monthly_attendance_wizard" model="ir.actions.act_window">
+            <field name="name">Month Attendance Marking</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">monthly.attendance.wizard</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+
+        <menuitem
+                name="Mark Month Attendance"
+                parent="aarsol_hr_attendance_ext.menu_monthly_attendance_main"
+                action="act_monthly_attendance_wizard"
+                sequence="50"
+                id="menu_month_attendance_mark"
+                />
+
+	</data>
+</odoo>

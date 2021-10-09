@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<odoo>
+    <data>
+        <record id="monthly_overtime_import_wizard_form_view" model="ir.ui.view">
+            <field name="name">wizard for import Overtime from csv or excel file</field>
+            <field name="model">monthly.overtime.import.wizard</field>
+            <field name="arch" type="xml">
+                <form string="Import Overtimes From Excel / CSV File">
+                    <group>
+                        <field name="import_option" widget="radio"/>
+                    </group>
+
+                    <group>
+                        <group>
+                            <field name="file" filename="name"/>
+                        </group>
+                        <group>
+                        </group>
+                    </group>
+                    <group>
+                        <group>
+                            <field name="sequence_opt" invisible="1"/>
+                        </group>
+                        <group>
+                        </group>
+                    </group>
+                    <footer>
+                        <button name="action_import_overtime" string="Import" type="object" class="btn-primary"/>
+                        <button string="Cancel" class="btn-default" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_monthly_overtime_import_wizard" model="ir.actions.act_window">
+            <field name="name">Import Overtime</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">monthly.overtime.import.wizard</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+
+        <menuitem
+                id="menu_hr_employee_monthly_overtime_import"
+                name="Employee Monthly Overtime Import"
+                parent="overtime_root_menu"
+                action="action_monthly_overtime_import_wizard"
+                groups="base.group_user,hr.group_hr_user"
+                sequence="50"
+        />
+
+    </data>
+</odoo>
