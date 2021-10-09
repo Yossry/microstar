@@ -142,3 +142,4 @@ class AccountPayments(models.Model):
                 'account_id': write_off_line_vals.get('account_id'),
             })
         return line_vals_list
+
