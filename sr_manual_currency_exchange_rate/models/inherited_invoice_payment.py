@@ -37,6 +37,7 @@ class AccountPayments(models.Model):
 
     def _prepare_move_line_default_vals(self, write_off_line_vals=None):
         self.ensure_one()
+        pdb.set_trace()
         write_off_line_vals = write_off_line_vals or {}
         if not self.journal_id.payment_debit_account_id or not self.journal_id.payment_credit_account_id:
             raise UserError(_("You can't create a new payment without an outstanding payments/receipts account set on the %s journal.", self.journal_id.display_name))
