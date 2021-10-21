@@ -16,6 +16,7 @@
         'security/security.xml',
         'security/ir.model.access.csv',
         'data/data.xml',
+        'menus/menu.xml',
 
         'views/product_model_view.xml',
         'views/product_brand_view.xml',
@@ -24,6 +25,7 @@
         'views/product_ext_view.xml',
         'views/purchase_ext_view.xml',
         'views/accounts_view.xml',
+        'views/res_partner_view.xml',
     ],
     'installable': True,
     'auto_install': False,
