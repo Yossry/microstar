@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<odoo>
+    <!-- Inherited Partner Form View-->
+    <record id="view_partner_form_others" model="ir.ui.view">
+        <field name="name">res.partner.form.others</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form"/>
+        <field name="priority" eval="18"/>
+        <field name="arch" type="xml">
+            <xpath expr="//page[@name='sales_purchases']//field[@name='property_supplier_payment_term_id']" position="after">
+                <field name="others" string="Others" help="Used for Loan Purpose to Partners"/>
+            </xpath>
+
+        </field>
+    </record>
+
+    <!-- inherited Search View -->
+    <record id="res_partner_others_view_search" model="ir.ui.view">
+        <field name="name">res.partner.others.select</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="account.res_partner_view_search"/>
+        <field name="arch" type="xml">
+            <filter name="supplier" position="after">
+                <filter string="Others" name="others" domain="[('others', '=', 1)]" help="Others"/>
+            </filter>
+        </field>
+    </record>
+
+
+    <!-- Action -->
+    <record id="action_res_partners_others_form" model="ir.actions.act_window">
+        <field name="name">Others</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">res.partner</field>
+        <field name="binding_view_types">form,kanban,tree</field>
+        <field name="context">
+            {"search_default_others": 1, 'default_others': 1,}
+        </field>
+        <field name="search_view_id" ref="res_partner_others_view_search"/>
+    </record>
+
+    <menuitem id="menu_res_partner_others_form"
+              parent="account.menu_finance_receivables"
+              action="action_res_partners_others_form"
+              sequence="200"
+    />
+
+
+</odoo>
